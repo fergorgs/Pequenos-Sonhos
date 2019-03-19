@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+using StartApp;
+
 public class SceneSwitch : MonoBehaviour
 {
 
@@ -16,17 +18,24 @@ public class SceneSwitch : MonoBehaviour
     public GameObject loadingScreenObj, adsObj, yesButton, noButton, startButton;
 	public GameObject title, btnsDefault, btnsLang, bird;
     public Slider slider;
-    public ShowAddScript ads;
+	public GameObject AdsBlackWall;
 
     AsyncOperation async;
 
-    // Use this for initialization
-    void Start()
+	InterstitialAd ad;
+
+
+
+	// Use this for initialization
+	void Start()
     {
+		ad = AdSdk.Instance.CreateInterstitial();
 
-        path = "Assets/Scenes/" + sceneName + ".unity";
+		ad.LoadAd(InterstitialAd.AdType.Automatic);
 
-		ads.SetSceneSwitch(this);
+		path = "Assets/Scenes/" + sceneName + ".unity";
+
+		//ads.SetSceneSwitch(this);
 
 		switch (sceneName)
 		{
@@ -76,7 +85,6 @@ public class SceneSwitch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		
 
 	}
 
@@ -107,9 +115,9 @@ public class SceneSwitch : MonoBehaviour
 
     public void SwitchScene()
     {
-        if (ads!=null && PlayerPrefs.GetInt("AdsOn") == 1) {
-            ads.ShowRewardedAd();
-        }
+        //if (ads!=null && PlayerPrefs.GetInt("AdsOn") == 1) {
+        //    ads.ShowRewardedAd();
+        //}
         if (sceneName != "Menu" && curLevel > highestLevel)
 		{
 			Debug.Log("Aqui");
@@ -147,17 +155,16 @@ public class SceneSwitch : MonoBehaviour
 
     public void LoadScreen(string lvlName) {
 
-		if (ads != null && PlayerPrefs.GetInt("AdsOn") == 1)
+		if (PlayerPrefs.GetInt("AdsOn") == 1)
 		{
-			ads.ShowRewardedAd();
-			ads.lvlName = lvlName;
+			ShowAdd(lvlName);
 		}
 		else
 			StartCoroutine(LoadingScreen(lvlName));
     }
 
     public IEnumerator LoadingScreen(string lvlName) {
-		//Debug.Log("Chamado");
+		Debug.Log("Chamado");
         loadingScreenObj.SetActive(true);
         async = SceneManager.LoadSceneAsync(lvlName, LoadSceneMode.Single);
         async.allowSceneActivation = false;
@@ -172,4 +179,22 @@ public class SceneSwitch : MonoBehaviour
             yield return null;
         }
     }
+
+	public void ShowAdd(string lvlName)
+	{
+		ad.RaiseAdLoaded += (sender, e) => {
+			ad.ShowAd();
+		};
+
+		ad.RaiseAdShown += (sender, e) => AdsBlackWall.GetComponent<SpriteRenderer>().color = Color.black;
+
+		ad.RaiseAdLoadingFailed += (sender, e) => StartCoroutine(LoadingScreen(lvlName));
+
+		ad.RaiseAdClosed += (sender, e) => StartCoroutine(LoadingScreen(lvlName));
+
+		ad.RaiseAdClicked += (sender, e) => StartCoroutine(LoadingScreen(lvlName));
+
+		ad.LoadAd(InterstitialAd.AdType.Automatic);
+
+	}
 }

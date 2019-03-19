@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 222807345183643156}
   - component: {fileID: 114363590314048596}
   - component: {fileID: 114965550858222494}
-  - component: {fileID: 114199067339961830}
+  - component: {fileID: 114369457551361220}
   m_Layer: 0
   m_Name: Anuncio
   m_TagString: Untagged
@@ -1194,7 +1194,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 114763356386575158}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &114184557922359230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1209,18 +1209,6 @@ MonoBehaviour:
   pauseControll: {fileID: 0}
   whiteWall: {fileID: 1952872437603710}
   menuButtons: {fileID: 1869911491047622}
---- !u!114 &114199067339961830
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1084087380004720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d97b55658037be4396f13f5fc198512, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lvlName: 
 --- !u!114 &114201230906582642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1482,6 +1470,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114369457551361220
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084087380004720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dacbfddbeffacb9449b6534f2eadf6c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114405524142445206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1505,7 +1504,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 114763356386575158}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &114414227085054322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1577,7 +1576,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 114763356386575158}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &114455217088160460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1756,7 +1755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d97b55658037be4396f13f5fc198512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lvlName: 
 --- !u!114 &114565918533146088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2570,8 +2568,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114199067339961830}
-        m_MethodName: ShowRewardedAd
+      - m_Target: {fileID: 114369457551361220}
+        m_MethodName: ShowAdd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -546,6 +546,48 @@ MonoBehaviour:
   IngText: Go to the website
   TchecText: "P\u0159ejd\u011Bte na webov\xE9 str\xE1nky"
   LangMan: {fileID: 0}
+--- !u!1 &77600040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 77600042}
+  - component: {fileID: 77600041}
+  m_Layer: 0
+  m_Name: Ad Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &77600041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 77600040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dacbfddbeffacb9449b6534f2eadf6c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blackWall: {fileID: 1527172394}
+--- !u!4 &77600042
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 77600040}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 132.24324, y: 48.598095, z: -3.3964088}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1527172396}
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &107633632
 GameObject:
   m_ObjectHideFlags: 0
@@ -2087,7 +2129,7 @@ MonoBehaviour:
   btnsLang: {fileID: 828761223}
   bird: {fileID: 1707755060}
   slider: {fileID: 1723398229}
-  ads: {fileID: 946289786}
+  AdsBlackWall: {fileID: 1527172394}
 --- !u!1 &496994086
 GameObject:
   m_ObjectHideFlags: 0
@@ -2342,8 +2384,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 509492616}
-        m_MethodName: ShowRewardedAd
+      - m_Target: {fileID: 77600041}
+        m_MethodName: ShowAdd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2400,7 +2442,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d97b55658037be4396f13f5fc198512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lvlName: 
 --- !u!1 &553542945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,7 +2560,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 1723398229}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &553542949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3337,7 +3378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d97b55658037be4396f13f5fc198512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lvlName: 
 --- !u!1 &974959950 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1542461388246750, guid: 14f8a6304929ff540a512ab2242cf636,
@@ -3763,7 +3803,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 1723398229}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &1032282714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4409,7 +4449,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 1723398229}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &1269368663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4576,7 +4616,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 1723398229}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &1320819526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4743,7 +4783,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 1723398229}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &1352365969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5077,6 +5117,81 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1527172394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1527172396}
+  - component: {fileID: 1527172395}
+  m_Layer: 0
+  m_Name: Black Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &1527172395
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1527172394}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 3e8a1498e1293bf45b453b280fc7d5ab, type: 3}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.8, y: 0.8}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &1527172396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1527172394}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 500, y: 500, z: 1}
+  m_Children: []
+  m_Father: {fileID: 77600042}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1545850192
 GameObject:
   m_ObjectHideFlags: 0
@@ -5286,7 +5401,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 1723398229}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &1567870966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7091,7 +7206,7 @@ MonoBehaviour:
   btnsLang: {fileID: 0}
   bird: {fileID: 0}
   slider: {fileID: 0}
-  ads: {fileID: 0}
+  AdsBlackWall: {fileID: 0}
 --- !u!114 &2115607707
 MonoBehaviour:
   m_ObjectHideFlags: 0
