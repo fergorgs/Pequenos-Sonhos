@@ -20,6 +20,7 @@ public class ShiftBehaviorTilesReais : MonoBehaviour
     private bool isReal;
     public bool GetIsReal() { return isReal; }
     private bool clicked;
+	public bool revealOnTouch = false;
     private bool touchingGhost = false;
 
 
@@ -133,8 +134,11 @@ public class ShiftBehaviorTilesReais : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ghost")
-            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.7f);
+		if (revealOnTouch)
+		{
+			if (collision.gameObject.tag == "Ghost")
+				GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.7f);
+		}
     }
 
 }

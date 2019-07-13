@@ -14,6 +14,7 @@ public class DoorBehavior : MonoBehaviour {
     public Type type;
 
     public GameObject WorldController;
+	private GameObject mainCamera;
 
     private WorldSwitchScript wrdSftScr;
     private ShiftBehavior sftBeh;
@@ -24,8 +25,9 @@ public class DoorBehavior : MonoBehaviour {
     private bool activated = false;
     public float timeMov;
     public float timeToKillLine = 2f;
+	private float startTime;
 
-    private void Start()
+	private void Start()
     {
         if (WorldController == null)
             WorldController = GameObject.FindGameObjectWithTag("WCS");
@@ -40,6 +42,8 @@ public class DoorBehavior : MonoBehaviour {
         lird.SetPosition(1, buttonPos);
 
         startPosition = transform.position;
+
+		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
     public IEnumerator MoveProp(Vector2 pos)
@@ -100,6 +104,7 @@ public class DoorBehavior : MonoBehaviour {
                 else if (AllBtnsActive())
                 {
                     lird.enabled = true;
+					StartCoroutine(ChangeCameraFocus());
                     StartCoroutine(TurnOffButtonLine());
                     activated = true;
                 }
@@ -110,7 +115,8 @@ public class DoorBehavior : MonoBehaviour {
                 if (currentPos == startPosition && AllBtnsActive())
                 {
                     lird.enabled = true;
-                    StartCoroutine(TurnOffButtonLine());
+					StartCoroutine(ChangeCameraFocus());
+					StartCoroutine(TurnOffButtonLine());
                     StartCoroutine(MoveProp(finalPosition));
                 }
                 else if (currentPos == finalPosition)
@@ -122,7 +128,8 @@ public class DoorBehavior : MonoBehaviour {
                 if (AllBtnsActive())
                 {
                     lird.enabled = true;
-                    StartCoroutine(TurnOffButtonLine());
+					StartCoroutine(ChangeCameraFocus());
+					StartCoroutine(TurnOffButtonLine());
                     if (currentPos == startPosition)
                         StartCoroutine(MoveProp(finalPosition));
                     else if (currentPos == finalPosition)
@@ -140,4 +147,19 @@ public class DoorBehavior : MonoBehaviour {
         lird.enabled = false;
         //Debug.Log("Out");
     }
+
+	private IEnumerator ChangeCameraFocus()
+	{
+		mainCamera.GetComponent<SmoothCameraScript>().target = gameObject.transform;
+		startTime = Time.time;
+		while (Time.time - startTime < 0.5f)
+			yield return null;
+		mainCamera.GetComponent<SmoothCameraScript>().enabled = false;
+
+		while (lird.enabled)
+			yield return null;
+
+		mainCamera.GetComponent<SmoothCameraScript>().enabled = true;
+		mainCamera.GetComponent<SmoothCameraScript>().target = mainCamera.GetComponent<SmoothCameraScript>().GetDefaultTarget();
+	}
 }

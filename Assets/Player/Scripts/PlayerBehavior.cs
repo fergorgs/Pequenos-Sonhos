@@ -44,6 +44,9 @@ public class PlayerBehavior : MonoBehaviour
     private Vector3 cpPos;
     public float tol = 0.2f;
 
+	private float startJumpTime;
+	public float jumpTol = 0.35f;
+
     // Use this for initialization
     void Start()
     {
@@ -84,192 +87,210 @@ public class PlayerBehavior : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().flipX = false;
         }
-        
-        switch (playerState)
-        {
-            //PARADO-----------------------------------------------------------------------------------------------------
-            case States.Parado:
-                if(grassSteps.isPlaying)
-                    grassSteps.Pause();
-                //COMPORTAMENTO
 
-                rb2d.velocity = new Vector2(0, yVel);
+		switch (playerState)
+		{
+			//PARADO-----------------------------------------------------------------------------------------------------
+			case States.Parado:
+				if (grassSteps.isPlaying)
+					grassSteps.Pause();
+				//COMPORTAMENTO
 
-                if (SimpleInput.GetAxis("Vertical")>0f /*|| jumpBuffer == true*/ || Input.GetKey(KeyCode.UpArrow))
-                {
-                    rb2d.velocity = new Vector2(0, (float)pulo);
-                    onGround = false;
-                }
+				rb2d.velocity = new Vector2(0, yVel);
 
-                //MUDANÇA DE ESTADO
-                if (onGround == false)
-                    playerState = States.Pulando;
-                //else if(yVel(
-                else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || SimpleInput.GetAxis("Horizontal")<0f || SimpleInput.GetAxis("Horizontal")>0f)
-                    playerState = States.Andando;
-                else if (Input.GetKeyDown(KeyCode.P))
-                    playerState = States.Pickup;
+				if (SimpleInput.GetAxis("Vertical") > 0f /*|| jumpBuffer == true*/ || Input.GetKey(KeyCode.UpArrow))
+				{
+					rb2d.velocity = new Vector2(0, (float)pulo);
+					onGround = false;
+				}
 
-                break;
+				//MUDANÇA DE ESTADO
+				if (onGround == false)
+				{
+					playerState = States.Pulando;
+					startJumpTime = Time.time;
+				}
+				//else if(yVel(
+				else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || SimpleInput.GetAxis("Horizontal") < 0f || SimpleInput.GetAxis("Horizontal") > 0f)
+					playerState = States.Andando;
+				else if (Input.GetKeyDown(KeyCode.P))
+					playerState = States.Pickup;
 
-            //ANDANDO-----------------------------------------------------------------------------------------------------
-            case States.Andando:
-                if(!grassSteps.isPlaying)
-                    grassSteps.UnPause();
-                //COMPORTAMENTO
-                if (SimpleInput.GetAxis("Horizontal")<0f || Input.GetKey(KeyCode.LeftArrow))
-                {
-                    if(rb2d.velocity.x > -maxVel)
-                        rb2d.velocity = new Vector2(xVel-(aceleracao * Time.deltaTime), yVel);  
-                    if (rb2d.velocity.x < 0) ;
-                        facing = Sides.Esquerda;
-                    //animação = anadando esquerda
-                }
-                else if (SimpleInput.GetAxis("Horizontal")>0f || Input.GetKey(KeyCode.RightArrow))
-                {
-                    //Debug.Log("Entrada");
-                    if(rb2d.velocity.x < maxVel)
-                        rb2d.velocity = new Vector2(xVel+ aceleracao * Time.deltaTime, yVel);   
-                    if(rb2d.velocity.x > 0)
-                        facing = Sides.Direita;
-                    //animação = andando direita
-                }
-                else
-                {
-                    rb2d.velocity = new Vector2((float)xVel / drag, yVel);    
-                    if (xVel > 0.5f && xVel < 0.5f)
-                        xVel = 0;
-                }
-                if (Input.GetKey(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical")>0f)                         
-                {
-                    rb2d.velocity = new Vector2(xVel, (float)pulo);
-                    onGround = false;
-                }
+				break;
 
-                //MUDANÇA DE ESTADO
-                if (onGround == false && (yVel < -tol || yVel > tol))
-                {                //++++++++++
-                    //Debug.Log("Indo para pulando, yVel = " + yVel);
-                    playerState = States.Pulando;
-                }
-                else if (rb2d.velocity.x == 0)
-                {
-                    //Debug.Log("Aqui");//<= 0.2f && rb2d.velocity.x >= -0.2f)
-                    playerState = States.Parado;
-                }
-                else if (Input.GetKeyDown(KeyCode.P))
-                    playerState = States.Pickup;
-                else if (empurrando == true /*&& (xVel < -tol || xVel > tol)*/)
-                    playerState = States.Empurrando;
+			//ANDANDO-----------------------------------------------------------------------------------------------------
+			case States.Andando:
+				if (!grassSteps.isPlaying)
+					grassSteps.UnPause();
+				//COMPORTAMENTO
+				if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))
+				{
+					if (rb2d.velocity.x > -maxVel)
+						rb2d.velocity = new Vector2(xVel - (aceleracao * Time.deltaTime), yVel);
+					if (rb2d.velocity.x < 0) ;
+					facing = Sides.Esquerda;
+					//animação = anadando esquerda
+				}
+				else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))
+				{
+					//Debug.Log("Entrada");
+					if (rb2d.velocity.x < maxVel)
+						rb2d.velocity = new Vector2(xVel + aceleracao * Time.deltaTime, yVel);
+					if (rb2d.velocity.x > 0)
+						facing = Sides.Direita;
+					//animação = andando direita
+				}
+				else
+				{
+					rb2d.velocity = new Vector2((float)xVel / drag, yVel);
+					if (xVel > 0.5f && xVel < 0.5f)
+						xVel = 0;
+				}
+				if (Input.GetKey(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical") > 0f)
+				{
+					rb2d.velocity = new Vector2(xVel, (float)pulo);
+					onGround = false;
+				}
 
-                break;
-            
-            //PULANDO-----------------------------------------------------------------------------------------------------
-            case States.Pulando:
-                if (grassSteps.isPlaying)
-                    grassSteps.Pause();
-                //COMPORTAMENTO
-                //animação = pulando
-                
-                
-                if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))
-                {
-                    if (rb2d.velocity.x > -maxVel)
-                        rb2d.velocity = new Vector2(xVel - aceleracao * Time.deltaTime, yVel);  
-                    if (rb2d.velocity.x < 0) 
-                        facing = Sides.Esquerda;
-                    //animação = anadando esquerda
-                }
-                else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))
-                {
-                    if (rb2d.velocity.x < maxVel)
-                        rb2d.velocity = new Vector2(xVel + aceleracao * Time.deltaTime, yVel);   
-                    if (rb2d.velocity.x > 0)
-                        facing = Sides.Direita;
-                    //animação = andando direita
-                }
-                else
-                {
-                    rb2d.velocity = new Vector2((float)xVel / dragInAir, yVel);    
-                    if (xVel > 0.5f && xVel < 0.5f)
-                        xVel = 0;
-                }
-                if (Input.GetKeyDown(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical")>0f)
-                {
-                    if (!jump[0].isPlaying && !jump[1].isPlaying && !jump[2].isPlaying && !jumped && !goingUp.isPlaying) {
-                        jump[(int)Random.Range(0, 3)].Play();
-                        goingUp.Play();
-                        jumped=true;
-                    }
-                    
+				//MUDANÇA DE ESTADO
+				if (onGround == false && (yVel < -tol || yVel > tol))
+				{                //++++++++++
+								 //Debug.Log("Indo para pulando, yVel = " + yVel);
+					playerState = States.Pulando;
+					startJumpTime = Time.time;
+				}
+				else if (rb2d.velocity.x == 0)
+				{
+					//Debug.Log("Aqui");//<= 0.2f && rb2d.velocity.x >= -0.2f)
+					playerState = States.Parado;
+				}
+				else if (Input.GetKeyDown(KeyCode.P))
+					playerState = States.Pickup;
+				else if (empurrando == true /*&& (xVel < -tol || xVel > tol)*/)
+					playerState = States.Empurrando;
 
-                    if (ghostJump == true)
-                    {
-                        rb2d.velocity = new Vector2(xVel, (float)pulo);
-                        
-                        ghostJump = false;
-                    }
-                    else
-                    {
-                        jumpBuffer = true;
-                        StartCoroutine(jumpBufferReset());
-                    }
-                }
+				break;
+
+			//PULANDO-----------------------------------------------------------------------------------------------------
+			case States.Pulando:
+				if (grassSteps.isPlaying)
+					grassSteps.Pause();
+				//COMPORTAMENTO
+				//animação = pulando
+
+				/*if(Time.time - startJumpTime < jumpTol)
+				{
+					if (Input.GetKey(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical") > 0f)
+					{
+						rb2d.velocity = new Vector2(xVel, (float)pulo);
+						yVel = (float)pulo;
+						Debug.Log("Haaay");
+					}
+					Debug.Log("Sup");
+				}*/
+					
 
 
+				if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))
+				{
+					if (rb2d.velocity.x > -maxVel)
+						rb2d.velocity = new Vector2(xVel - aceleracao * Time.deltaTime, yVel);
+					if (rb2d.velocity.x < 0)
+						facing = Sides.Esquerda;
+					//animação = anadando esquerda
+				}
+				else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))
+				{
+					if (rb2d.velocity.x < maxVel)
+						rb2d.velocity = new Vector2(xVel + aceleracao * Time.deltaTime, yVel);
+					if (rb2d.velocity.x > 0)
+						facing = Sides.Direita;
+					//animação = andando direita
+				}
+				else
+				{
+					rb2d.velocity = new Vector2((float)xVel / dragInAir, yVel);
+					if (xVel > 0.5f && xVel < 0.5f)
+						xVel = 0;
+				}
+				if (Input.GetKeyDown(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical") > 0f)
+				{
+					if (!jump[0].isPlaying && !jump[1].isPlaying && !jump[2].isPlaying && !jumped && !goingUp.isPlaying) {
+						jump[(int)Random.Range(0, 3)].Play();
+						goingUp.Play();
+						jumped = true;
+					}
 
-                //MUDANÇA DE ESTADO
-                if (onGround == true)
-                {
-                    if(jumped || falling)
-                        landing.Play();
-                    falling = false;
-                    jumped = false;
-                    if (rb2d.velocity.x != 0 && !sobrePrancha)
-                    {
-                        //Debug.Log("Entrou (sobrePrancha = " + sobrePrancha + ")");
-                        playerState = States.Andando;
-                    }
-                    else
-                        playerState = States.Parado;
-                }
 
-                break;
+					if (ghostJump == true)
+					{
+						rb2d.velocity = new Vector2(xVel, (float)pulo);
 
-            //PICKUP-----------------------------------------------------------------------------------------------------
-            case States.Pickup:
+						ghostJump = false;
+					}
+					else
+					{
+						jumpBuffer = true;
+						StartCoroutine(jumpBufferReset());
+					}
+				}
 
-                //COMPORTAMENTO
-                rb2d.velocity = Vector2.zero;
-                //animação = usando pick up
 
-                //MUDANÇA DE ESTADO
-                //if (animação.ended)
-                playerState = States.Parado;
 
-                break;
+				//MUDANÇA DE ESTADO
+				if (onGround == true)
+				{
+					if (jumped || falling)
+						landing.Play();
+					falling = false;
+					jumped = false;
+					if (rb2d.velocity.x != 0 && !sobrePrancha)
+					{
+						//Debug.Log("Entrou (sobrePrancha = " + sobrePrancha + ")");
+						playerState = States.Andando;
+					}
+					else
+						playerState = States.Parado;
+				}
 
-            //EMPURRANDO-----------------------------------------------------------------------------------------------------
-            case States.Empurrando:
+				break;
 
-                //COMPORTAMENTO
-                if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))
-                {
-                    rb2d.velocity = new Vector2(-maxVel, yVel);
-                }
-                else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))
-                {
-                    rb2d.velocity = new Vector2(maxVel, yVel);
-                }
-                if (Input.GetKeyDown(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical")>0f)
-                {
-                    rb2d.velocity = new Vector2(0, (float)pulo);
-                    onGround = false;
-                }
+			//PICKUP-----------------------------------------------------------------------------------------------------
+			case States.Pickup:
 
-                //MUDANÇA DE ESTADO
-                if (onGround == false && (yVel < -tol || yVel > tol))
-                    playerState = States.Pulando;
+				//COMPORTAMENTO
+				rb2d.velocity = Vector2.zero;
+				//animação = usando pick up
+
+				//MUDANÇA DE ESTADO
+				//if (animação.ended)
+				playerState = States.Parado;
+
+				break;
+
+			//EMPURRANDO-----------------------------------------------------------------------------------------------------
+			case States.Empurrando:
+
+				//COMPORTAMENTO
+				if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))
+				{
+					rb2d.velocity = new Vector2(-maxVel, yVel);
+				}
+				else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))
+				{
+					rb2d.velocity = new Vector2(maxVel, yVel);
+				}
+				if (Input.GetKeyDown(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical") > 0f)
+				{
+					rb2d.velocity = new Vector2(0, (float)pulo);
+					onGround = false;
+				}
+
+				//MUDANÇA DE ESTADO
+				if (onGround == false && (yVel < -tol || yVel > tol)) { 
+					playerState = States.Pulando;
+					startJumpTime = Time.time;
+				}
                 else if (empurrando == false || !GettingInput()/*(xVel > -tol && xVel < tol)*/)
                     playerState = States.Parado;
                 else if (Input.GetKeyDown(KeyCode.P))

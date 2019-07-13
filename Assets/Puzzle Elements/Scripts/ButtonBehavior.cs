@@ -57,13 +57,15 @@ public class ButtonBehavior : MonoBehaviour {
 
         if (col.tag == "Player")
             inRange = true;
+		GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     void OnTriggerExit2D(Collider2D col) {
 
         if (col.tag == "Player")
             inRange = false;
-    }
+		GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.7f, 0.7f, 1);
+	}
 
     public void Activate()
     {

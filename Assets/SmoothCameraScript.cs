@@ -25,6 +25,8 @@ public class SmoothCameraScript : MonoBehaviour {
 
 	public bool debug = true;
 
+	public Transform GetDefaultTarget() { return GameObject.FindGameObjectWithTag("Player").transform; }
+
     void Start()
     {
         wrdControl = GameObject.FindGameObjectWithTag("WCS");

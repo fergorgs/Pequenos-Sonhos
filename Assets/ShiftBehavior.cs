@@ -21,6 +21,7 @@ public class ShiftBehavior : MonoBehaviour
 
     private bool isReal;
     public bool GetIsReal() { return isReal; }
+	public void SetIsReal(bool val) { isReal = val; }
     private bool clicked;
 
     public float transVal = 0.5f;

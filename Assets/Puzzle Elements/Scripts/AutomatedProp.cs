@@ -14,7 +14,8 @@ public class AutomatedProp : MonoBehaviour {
     public Type type;
     
     public GameObject WorldController;
-    private WorldSwitchScript wrdSftScr;
+	private GameObject mainCamera;
+	private WorldSwitchScript wrdSftScr;
     private ShiftBehavior sftBeh;
     private LineRenderer lird;
     public GameObject[] buttons;
@@ -25,6 +26,8 @@ public class AutomatedProp : MonoBehaviour {
     public float timeMov;
     public float activationDelay = 0.2f;
     public float timeToKillLine = 2f;
+
+	private float startTime;
 
     private void Start()
     {
@@ -42,7 +45,9 @@ public class AutomatedProp : MonoBehaviour {
 
         startPosition = transform.position;
 
-    }
+		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+
+	}
 
     public IEnumerator MoveProp(Vector2 pos) {
 
@@ -110,22 +115,23 @@ public class AutomatedProp : MonoBehaviour {
                     else if (currentPos == finalPosition)
                         StartCoroutine(MoveProp(startPosition));
                 }
-                else if (btnsActive && wrdSftScr.worldIsReal() == sftBeh.GetIsReal())
+                else if (btnsActive /*&& wrdSftScr.worldIsReal() == sftBeh.GetIsReal()*/)
                 {
                     activated = true;
                     lird.enabled = true;
-                    StartCoroutine(TurnOffButtonLine());
+					StartCoroutine(ChangeCameraFocus());
+					StartCoroutine(TurnOffButtonLine());
                 }
                 break;
 
             case Type.LoopOnce:
 
-                if (currentPos == startPosition && btnsActive && wrdSftScr.worldIsReal() == sftBeh.GetIsReal())
+                if (currentPos == startPosition && btnsActive /*&& wrdSftScr.worldIsReal() == sftBeh.GetIsReal()*/)
                 {
                     StartCoroutine(MoveProp(finalPosition));
                     lird.enabled = true;
-                    //Debug.Log("In");
-                    StartCoroutine(TurnOffButtonLine());
+					StartCoroutine(ChangeCameraFocus());
+					StartCoroutine(TurnOffButtonLine());
                 }
                 else if (currentPos == finalPosition)
                     StartCoroutine(MoveProp(startPosition));
@@ -133,10 +139,11 @@ public class AutomatedProp : MonoBehaviour {
 
             case Type.SingleMovement:
 
-                if (btnsActive && wrdSftScr.worldIsReal() == sftBeh.GetIsReal())
+                if (btnsActive /*&& wrdSftScr.worldIsReal() == sftBeh.GetIsReal()*/)
                 {
                     lird.enabled = true;
-                    StartCoroutine(TurnOffButtonLine());
+					StartCoroutine(ChangeCameraFocus());
+					StartCoroutine(TurnOffButtonLine());
                     if (currentPos == startPosition)
                         StartCoroutine(MoveProp(finalPosition));
                     else if (currentPos == finalPosition)
@@ -157,9 +164,6 @@ public class AutomatedProp : MonoBehaviour {
             {
                 for(int i = 0; i < cols.Length; i++)
                     Physics2D.IgnoreCollision(bxcol, cols[i], true);
-                /*Debug.Log("Entra\n" +
-                        "self pos: " + transform.position +
-                        "col pos: " + collision.gameObject.transform.position);*/
             }
             else
                 collision.GetComponent<Collider2D>().transform.SetParent(transform);
@@ -205,4 +209,19 @@ public class AutomatedProp : MonoBehaviour {
         lird.enabled = false;
         //Debug.Log("Out");
     }
+
+	private IEnumerator ChangeCameraFocus()
+	{
+		mainCamera.GetComponent<SmoothCameraScript>().target = gameObject.transform;
+		startTime = Time.time;
+		while (Time.time - startTime < 0.5f)
+			yield return null;
+		mainCamera.GetComponent<SmoothCameraScript>().enabled = false;
+
+		while (lird.enabled)
+			yield return null;
+
+		mainCamera.GetComponent<SmoothCameraScript>().enabled = true;
+		mainCamera.GetComponent<SmoothCameraScript>().target = mainCamera.GetComponent<SmoothCameraScript>().GetDefaultTarget();
+	}
 }

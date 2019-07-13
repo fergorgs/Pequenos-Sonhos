@@ -8,7 +8,7 @@ public class AdManagement : MonoBehaviour {
 
 	private bool hasBeenClosed = false;
 
-	//public GameObject blackWall;
+	public GameObject blackWall;
 
 	InterstitialAd ad;
 
@@ -18,7 +18,7 @@ public class AdManagement : MonoBehaviour {
 
 		ad.LoadAd(InterstitialAd.AdType.Automatic);
 
-		//blackWall.GetComponent<SpriteRenderer>().color = Color.clear;	
+		blackWall.GetComponent<SpriteRenderer>().color = Color.clear;	
 	}
 
 	public void ShowAdd()
@@ -28,9 +28,9 @@ public class AdManagement : MonoBehaviour {
 			ad.ShowAd();
 		};
 
-		//ad.RaiseAdShown += (sender, e) => blackWall.GetComponent<SpriteRenderer>().color = Color.black;
+		ad.RaiseAdShown += (sender, e) => blackWall.GetComponent<SpriteRenderer>().color = Color.black;
 
-		//ad.RaiseAdClosed += (sender, e) => { hasBeenClosed = true; blackWall.GetComponent<SpriteRenderer>().color = Color.clear; };
+		ad.RaiseAdClosed += (sender, e) => { hasBeenClosed = true; blackWall.GetComponent<SpriteRenderer>().color = Color.clear; };
 
 		ad.LoadAd(InterstitialAd.AdType.Automatic);
 	}
