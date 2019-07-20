@@ -23,7 +23,9 @@ public class SmoothCameraScript : MonoBehaviour {
 
     private Camera cam;
 
-	public bool debug = true;
+	//public bool getFromTarget = true;
+	private Vector3 vectorTarget;
+	public void SetVectorTarget(Vector3 vector) { vectorTarget = vector; }
 
 	public Transform GetDefaultTarget() { return GameObject.FindGameObjectWithTag("Player").transform; }
 
@@ -65,12 +67,19 @@ public class SmoothCameraScript : MonoBehaviour {
 	private void FixedUpdate()
 	{
 		if (target)
-			{
-				Vector3 point = cam.WorldToViewportPoint(target.position);
-				Vector3 delta = target.position - cam.ViewportToWorldPoint(new Vector3(0.5f, 0.4f, point.z)); //(new Vector3(0.5, 0.5, point.z));
-				Vector3 destination = transform.position + delta;
-				transform.position = Vector3.SmoothDamp(transform.position, destination + offSet, ref velocity, dampTime);
-			}
+		{
+			Vector3 point = cam.WorldToViewportPoint(target.position);
+			Vector3 delta = target.position - cam.ViewportToWorldPoint(new Vector3(0.5f, 0.4f, point.z)); //(new Vector3(0.5, 0.5, point.z));
+			Vector3 destination = transform.position + delta;
+			transform.position = Vector3.SmoothDamp(transform.position, destination + offSet, ref velocity, dampTime);
+		}
+		else
+		{
+			Vector3 point = cam.WorldToViewportPoint(vectorTarget);
+			Vector3 delta = vectorTarget - cam.ViewportToWorldPoint(new Vector3(0.5f, 0.4f, point.z)); //(new Vector3(0.5, 0.5, point.z));
+			Vector3 destination = transform.position + delta;
+			transform.position = Vector3.SmoothDamp(transform.position, destination + offSet, ref velocity, dampTime);
+		}
 	}
 
 	public IEnumerator DampTimeReset(float dampTimeReset)

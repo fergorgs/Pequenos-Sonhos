@@ -58,14 +58,13 @@ public class PlayerActingCommands : MonoBehaviour
 
 		rb2d = GetComponent<Rigidbody2D>();
 		//cpPos = GameObject.FindWithTag("Checkpoint").transform.position;
-		if (PlayerPrefs.GetInt("isAfterCP") == 1)
-			transform.position = cpPos;
+		//if (PlayerPrefs.GetInt("isAfterCP") == 1)
+			//transform.position = cpPos;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		absVel = rb2d.velocity.magnitude;
 		//Debug.Log("Estado = " + playerState);
 		xVel = rb2d.velocity.x;
 		yVel = rb2d.velocity.y;
@@ -90,18 +89,14 @@ public class PlayerActingCommands : MonoBehaviour
 			GetComponent<SpriteRenderer>().flipX = false;
 		}
 
-		//Debug.Log("Vel = " + rb2d.velocity);
-		Debug.Log("pssRight = " + pssRight);
-
 		switch (playerState)
 		{
 			//PARADO-----------------------------------------------------------------------------------------------------
 			case States.Parado:
-				Debug.Log("Parado");
 				//if (grassSteps.isPlaying)
 					//grassSteps.Pause();
 				//COMPORTAMENTO
-				Debug.Log("FINISH LINE-------------------------------");
+
 				rb2d.velocity = new Vector2(0, yVel);
 
 				if (pssUp)
@@ -113,17 +108,12 @@ public class PlayerActingCommands : MonoBehaviour
 				//MUDANÇA DE ESTADO
 				if (onGround == false)
 				{
-					Debug.Log("OnGround true");
 					playerState = States.Pulando;
 					startJumpTime = Time.time;
 				}
 				//else if(yVel(
 				else if (pssLeft || pssRight)
-				{
-
-					Debug.Log("Changing state");
 					playerState = States.Andando;
-				}
 				else if (pssP)
 					playerState = States.Pickup;
 
@@ -131,8 +121,6 @@ public class PlayerActingCommands : MonoBehaviour
 
 			//ANDANDO-----------------------------------------------------------------------------------------------------
 			case States.Andando:
-
-				Debug.Log("Is walking");
 				//if (!grassSteps.isPlaying)
 					//grassSteps.UnPause();
 				//COMPORTAMENTO
@@ -146,7 +134,6 @@ public class PlayerActingCommands : MonoBehaviour
 				}
 				else if (pssRight)
 				{
-					Debug.Log("Press Right called");
 					//Debug.Log("Entrada");
 					if (rb2d.velocity.x < maxVel)
 						rb2d.velocity = new Vector2(xVel + aceleracao * Time.deltaTime, yVel);
@@ -188,7 +175,7 @@ public class PlayerActingCommands : MonoBehaviour
 			//PULANDO-----------------------------------------------------------------------------------------------------
 			case States.Pulando:
 				//if (grassSteps.isPlaying)
-				//	grassSteps.Pause();
+					//grassSteps.Pause();
 				//COMPORTAMENTO
 				//animação = pulando
 

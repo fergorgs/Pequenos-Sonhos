@@ -26,10 +26,16 @@ public class AutomatedProp : MonoBehaviour {
     public float timeMov;
     public float activationDelay = 0.2f;
     public float timeToKillLine = 2f;
+	public bool changeCamera = false;
+
+	//private Transform transCopy;
 
 	private float startTime;
 
-    private void Start()
+	private Vector3 copyPos;
+
+
+	private void Start()
     {
         if (WorldController == null)
             WorldController = GameObject.FindGameObjectWithTag("WCS");
@@ -46,6 +52,8 @@ public class AutomatedProp : MonoBehaviour {
         startPosition = transform.position;
 
 		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+
+		copyPos = transform.position;
 
 	}
 
@@ -212,16 +220,21 @@ public class AutomatedProp : MonoBehaviour {
 
 	private IEnumerator ChangeCameraFocus()
 	{
-		mainCamera.GetComponent<SmoothCameraScript>().target = gameObject.transform;
-		startTime = Time.time;
-		while (Time.time - startTime < 0.5f)
-			yield return null;
-		mainCamera.GetComponent<SmoothCameraScript>().enabled = false;
+		if (changeCamera)
+		{
+			mainCamera.GetComponent<SmoothCameraScript>().target = null;// transCopy;
+			mainCamera.GetComponent<SmoothCameraScript>().SetVectorTarget(copyPos);
 
-		while (lird.enabled)
-			yield return null;
+			startTime = Time.time;
+			while (Time.time - startTime < 0.5f)
+				yield return null;
+			mainCamera.GetComponent<SmoothCameraScript>().enabled = false;
 
-		mainCamera.GetComponent<SmoothCameraScript>().enabled = true;
-		mainCamera.GetComponent<SmoothCameraScript>().target = mainCamera.GetComponent<SmoothCameraScript>().GetDefaultTarget();
+			while (lird.enabled)
+				yield return null;
+
+			mainCamera.GetComponent<SmoothCameraScript>().enabled = true;
+			mainCamera.GetComponent<SmoothCameraScript>().target = mainCamera.GetComponent<SmoothCameraScript>().GetDefaultTarget();
+		}
 	}
 }

@@ -25,7 +25,10 @@ public class DoorBehavior : MonoBehaviour {
     private bool activated = false;
     public float timeMov;
     public float timeToKillLine = 2f;
+	public bool changeCamera = false;
 	private float startTime;
+
+	private Vector3 copyPos;
 
 	private void Start()
     {
@@ -44,7 +47,9 @@ public class DoorBehavior : MonoBehaviour {
         startPosition = transform.position;
 
 		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-    }
+
+		copyPos = transform.position;
+	}
 
     public IEnumerator MoveProp(Vector2 pos)
     {
@@ -150,16 +155,21 @@ public class DoorBehavior : MonoBehaviour {
 
 	private IEnumerator ChangeCameraFocus()
 	{
-		mainCamera.GetComponent<SmoothCameraScript>().target = gameObject.transform;
-		startTime = Time.time;
-		while (Time.time - startTime < 0.5f)
-			yield return null;
-		mainCamera.GetComponent<SmoothCameraScript>().enabled = false;
+		if (changeCamera)
+		{
+			mainCamera.GetComponent<SmoothCameraScript>().target = null;// transCopy;
+			mainCamera.GetComponent<SmoothCameraScript>().SetVectorTarget(copyPos);
+			
+			startTime = Time.time;
+			while (Time.time - startTime < 0.5f)
+				yield return null;
+			mainCamera.GetComponent<SmoothCameraScript>().enabled = false;
 
-		while (lird.enabled)
-			yield return null;
+			while (lird.enabled)
+				yield return null;
 
-		mainCamera.GetComponent<SmoothCameraScript>().enabled = true;
-		mainCamera.GetComponent<SmoothCameraScript>().target = mainCamera.GetComponent<SmoothCameraScript>().GetDefaultTarget();
+			mainCamera.GetComponent<SmoothCameraScript>().enabled = true;
+			mainCamera.GetComponent<SmoothCameraScript>().target = mainCamera.GetComponent<SmoothCameraScript>().GetDefaultTarget();
+		}
 	}
 }

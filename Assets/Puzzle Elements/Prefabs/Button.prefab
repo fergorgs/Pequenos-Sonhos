@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 82753942975384756}
   - component: {fileID: 95060966721927362}
   - component: {fileID: 70481007283129942}
+  - component: {fileID: 7073648493540535519}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -230,3 +231,18 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 14, y: 7}
   m_Direction: 1
+--- !u!114 &7073648493540535519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694750688186046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe7b1597fa8447949825a332053d508d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPos: {x: 0, y: 0, z: 0}
+  changeCamera: 0
+  durationInSeconds: 2

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ShiftBehavior : MonoBehaviour
 {
@@ -135,24 +137,27 @@ public class ShiftBehavior : MonoBehaviour
 
 	void OnMouseUp()
     {
-        if (!pauseScript.IsPaused())
-        {
-			if (isShiftable && !clickCoolDown)
+		if (!EventSystem.current.IsPointerOverGameObject())
+		{
+			if (!pauseScript.IsPaused())
 			{
-				isReal = !isReal;
-				clicked = !clicked;
-				foreach (SpriteRenderer s in sprd)
+				if (isShiftable && !clickCoolDown)
 				{
-					if (s.color == Color.magenta)
-						s.color = Color.white;
-					else
-						s.color = Color.magenta;
-				}
+					isReal = !isReal;
+					clicked = !clicked;
+					foreach (SpriteRenderer s in sprd)
+					{
+						if (s.color == Color.magenta)
+							s.color = Color.white;
+						else
+							s.color = Color.magenta;
+					}
 
-				clickCoolDown = true;
-				StartCoroutine(ClickCooldown());
+					clickCoolDown = true;
+					StartCoroutine(ClickCooldown());
+				}
 			}
-        }
+		}
     }
 }
 

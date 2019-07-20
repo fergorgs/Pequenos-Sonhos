@@ -57,8 +57,8 @@ public class PlayerBehavior : MonoBehaviour
         
         rb2d = GetComponent<Rigidbody2D>();
         cpPos = GameObject.FindWithTag("Checkpoint").transform.position;
-        if (PlayerPrefs.GetInt("isAfterCP") == 1)
-            transform.position = cpPos;
+        //if (PlayerPrefs.GetInt("isAfterCP") == 1)
+          //  transform.position = cpPos;
     }
 
     // Update is called once per frame

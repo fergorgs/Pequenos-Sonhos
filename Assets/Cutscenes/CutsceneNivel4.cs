@@ -15,7 +15,7 @@ public class CutsceneNivel4 : MonoBehaviour {
     public GameObject SwitchButton;
     public GameObject pickupCanvas;
     public GameObject flash;
-	public AudioSource bgMusic;
+	//public AudioSource bgMusic;
 
     public CutsceneShift ctSh;
     public ParticleFollowPath[] paths;
@@ -73,7 +73,8 @@ public class CutsceneNivel4 : MonoBehaviour {
         }
 
 		wrdCont.BgMusic.enabled = false;
-        SwitchButton.GetComponent<Image>().raycastTarget = true;
+		wrdCont.DreamMusic.enabled = false;
+		SwitchButton.GetComponent<Image>().raycastTarget = true;
         //---------------------------------------------------------------
         //--------Troca sprites-------------------------------------------
         //THROW 1
