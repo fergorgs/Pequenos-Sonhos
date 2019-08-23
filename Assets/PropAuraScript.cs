@@ -17,6 +17,8 @@ public class PropAuraScript : MonoBehaviour
 
 	private bool fadingOut = true;
 
+	public Animator anm;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +34,8 @@ public class PropAuraScript : MonoBehaviour
 		fatherMinTrans = father.GetComponent<ShiftBehavior>().transVal;
 
 		StartCoroutine(Fade());
+
+		anm = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -44,6 +48,8 @@ public class PropAuraScript : MonoBehaviour
 			else
 				sprd.color = sprd.color + (new Color(0, 0, 0, fatherMinTrans));
 		}
+
+
     }
 
 	private IEnumerator Fade()
@@ -89,5 +95,10 @@ public class PropAuraScript : MonoBehaviour
 			yield return new WaitForFixedUpdate();
 		}
 
+	}
+
+	public void PopUpEffect()
+	{
+		GetComponent<Animator>().CrossFade("Pop_up", 0);
 	}
 }

@@ -8,7 +8,8 @@ public class CutsceneNivel1 : MonoBehaviour
     public Camera mCamera;
     public Vector3 finalPos, finalCamera;
     public AudioSource level1, cutSong;
-    public GameObject fazenda, fazendaViva, fazendeiro, fazendeiroFeliz, finalLevelGo, eventSystem, particle;
+    public GameObject /*fazenda, fazendaViva, fazendeiro, fazendeiroFeliz,*/ finalLevelGo, eventSystem, particle;
+	public GameObject[] floresMortas, floresVivas, flashes;
     public Canvas canvas;
     public GameObject rightArrow;
     public WorldSwitchScript wrdCont;
@@ -19,9 +20,10 @@ public class CutsceneNivel1 : MonoBehaviour
         {
             //canvas.enabled = false;
             Destroy(rightArrow);
-            //level1.Stop();
-            //cutSong.Play();
-            eventSystem.SetActive(false);
+			//level1.Stop();
+			level1.volume = (level1.volume / 2);
+			//cutSong.Play();
+			eventSystem.SetActive(false);
             StartCoroutine(Cutscene(pb.transform.position, finalPos,finalCamera,
                 new Vector3(finalLevelGo.transform.position.x, pb.transform.position.y, pb.transform.position.z), pb.maxVel));
             
@@ -76,7 +78,7 @@ public class CutsceneNivel1 : MonoBehaviour
             mCamera.transform.position = Vector3.Lerp(startCamera, finalCamera, t);
             yield return new WaitForFixedUpdate();
         }
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4.5f);
         //------------------Troca Sprites Fanzeda e Fazendeiro -------------------------------------
         particle.SetActive(true);
         pb.animator.Play("Player_Throw");
@@ -85,13 +87,21 @@ public class CutsceneNivel1 : MonoBehaviour
         pb.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(2f);
         particle.SetActive(false);
-        StartCoroutine(ChangeAlpha(fazenda, fazenda.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
+		for (int i = 0; i < 3; i++)
+			flashes[i].SetActive(true);
+		yield return new WaitForSeconds(1.5f);
+		for(int i = 0; i < 3; i++)
+		{
+			StartCoroutine(ChangeAlpha(floresMortas[i], floresMortas[i].GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
+			StartCoroutine(ChangeAlpha(floresVivas[i], floresVivas[i].GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 1), 2f));
+		}
+		//StartCoroutine(ChangeAlpha(fazenda, fazenda.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
         //yield return new WaitForSeconds(2f);
-        StartCoroutine(ChangeAlpha(fazendaViva, fazendaViva.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 1), 2f));
-        yield return new WaitForSeconds(2f);
-        StartCoroutine(ChangeAlpha(fazendeiro, fazendeiro.GetComponent<SpriteRenderer>().color, Color.clear, 2f));
-        StartCoroutine(ChangeAlpha(fazendeiroFeliz, fazendeiroFeliz.GetComponent<SpriteRenderer>().color, Color.white, 2f));
-        yield return new WaitForSeconds(3f);
+        //StartCoroutine(ChangeAlpha(fazendaViva, fazendaViva.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 1), 2f));
+        yield return new WaitForSeconds(6f);
+        //StartCoroutine(ChangeAlpha(fazendeiro, fazendeiro.GetComponent<SpriteRenderer>().color, Color.clear, 2f));
+        //StartCoroutine(ChangeAlpha(fazendeiroFeliz, fazendeiroFeliz.GetComponent<SpriteRenderer>().color, Color.white, 2f));
+        //yield return new WaitForSeconds(3f);
         //---------------------Movimentação final--------------------------------------------------------
         step = (speed / (finalPos - finalLevel).magnitude) * Time.fixedDeltaTime;
 

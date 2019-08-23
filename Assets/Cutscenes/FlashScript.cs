@@ -22,7 +22,33 @@ public class FlashScript : MonoBehaviour {
 
     private IEnumerator ChangeAlpha(GameObject go, Color start, Color end, float duration)
     {
-        runs++;
+		/*runs++;
+		float deltaAlpha;
+		float absAlpha = Mathf.Abs(start.a - end.a);
+
+		if(start.a > end.a)
+		{
+			while (go.GetComponent<SpriteRenderer>().color.a > end.a + 0.05f)
+			{
+				deltaAlpha = (absAlpha * Time.deltaTime) / duration;
+
+				go.GetComponent<SpriteRenderer>().color = new Color(start.r, start.g, start.b, go.GetComponent<SpriteRenderer>().color.a-deltaAlpha);
+
+				yield return null;
+			}
+		}
+		else
+		{
+			while (go.GetComponent<SpriteRenderer>().color.a < end.a - 0.05f)
+			{
+				deltaAlpha = (absAlpha * Time.deltaTime) / duration;
+
+				go.GetComponent<SpriteRenderer>().color = new Color(start.r, start.g, start.b, go.GetComponent<SpriteRenderer>().color.a + deltaAlpha);
+
+				yield return null;
+			}
+		}*/
+		runs++;
         for (float t = 0f; t < 0.5f; t += Time.deltaTime)
         {
             yield return null;
@@ -35,9 +61,13 @@ public class FlashScript : MonoBehaviour {
         }
         go.GetComponent<SpriteRenderer>().color = end;
 
-        StartCoroutine(ChangeAlpha(gameObject, Color.white, new Color(1, 1, 1, 0), flashDuration / 2));
+		//Debug.Log("runs = " + runs);
+		//if (runs == 2)
+		//{
+			//Debug.Log("destroy");
+			Destroy(gameObject);
+		//}
 
-        if (runs == 2)
-            Destroy(gameObject);
-    }
+		StartCoroutine(ChangeAlpha(gameObject, Color.white, new Color(1, 1, 1, 0), flashDuration / 2));
+	}
 }

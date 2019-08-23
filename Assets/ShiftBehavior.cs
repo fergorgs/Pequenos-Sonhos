@@ -30,6 +30,9 @@ public class ShiftBehavior : MonoBehaviour
 
 	private float clickCoolDownTime = 0.5f;
 	private bool clickCoolDown = false;
+	private bool isProp = false;
+
+	public Animator childComponent;
 
 
     // Use this for initialization
@@ -75,7 +78,10 @@ public class ShiftBehavior : MonoBehaviour
             if (rb2d != null)
                 rb2d.simulated = false;
         }
-    }
+
+		if (gameObject.tag == "Caixa" || gameObject.tag == "Caixa Empurravel" || gameObject.tag == "Plataforma")
+			isProp = true;
+	}
 
     // Update is called once per frame
     void Update()
@@ -87,7 +93,16 @@ public class ShiftBehavior : MonoBehaviour
             {
                 s.color = Color.white;
             }
-            clicked = false;
+
+			if (clicked)
+			{
+				if (isProp)
+				{
+					GetComponent<Animator>().CrossFade("Pop_up", 0);
+					GetComponentInChildren<PropAuraScript>().PopUpEffect();
+				}
+				clicked = false;
+			}
 
             if (wrdSwitch.worldIsReal() == isReal)
             {
@@ -137,7 +152,7 @@ public class ShiftBehavior : MonoBehaviour
 
 	void OnMouseUp()
     {
-		if (!EventSystem.current.IsPointerOverGameObject())
+		if (gameObject.name == "Caixa_E")
 		{
 			if (!pauseScript.IsPaused())
 			{
@@ -155,6 +170,30 @@ public class ShiftBehavior : MonoBehaviour
 
 					clickCoolDown = true;
 					StartCoroutine(ClickCooldown());
+				}
+			}
+		}
+		else
+		{
+			if (!EventSystem.current.IsPointerOverGameObject())
+			{
+				if (!pauseScript.IsPaused())
+				{
+					if (isShiftable && !clickCoolDown)
+					{
+						isReal = !isReal;
+						clicked = !clicked;
+						foreach (SpriteRenderer s in sprd)
+						{
+							if (s.color == Color.magenta)
+								s.color = Color.white;
+							else
+								s.color = Color.magenta;
+						}
+
+						clickCoolDown = true;
+						StartCoroutine(ClickCooldown());
+					}
 				}
 			}
 		}

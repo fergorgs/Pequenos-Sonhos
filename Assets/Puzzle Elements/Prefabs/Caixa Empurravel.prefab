@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1839843258}
   - component: {fileID: 1839843260}
   - component: {fileID: 1839843261}
+  - component: {fileID: 993810331506836521}
   m_Layer: 0
   m_Name: Aurea
   m_TagString: Untagged
@@ -97,6 +98,25 @@ MonoBehaviour:
   father: {fileID: 0}
   period: 2
   minTrans: 0.4
+--- !u!95 &993810331506836521
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839843257}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 75056806c9fab054ca2f03efb5877f50, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1021717773438520
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +137,7 @@ GameObject:
   - component: {fileID: 61451202380271042}
   - component: {fileID: 61703466037730384}
   - component: {fileID: 61746661414732850}
+  - component: {fileID: 4024511450986551251}
   m_Layer: 0
   m_Name: Caixa Empurravel
   m_TagString: Caixa Empurravel
@@ -475,3 +496,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9, y: 0.05}
   m_EdgeRadius: 0
+--- !u!95 &4024511450986551251
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021717773438520}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 652d256987aca214a875537f04149610, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -137,7 +137,7 @@ MonoBehaviour:
   isThrowing: 0
   maxVel: 5
   aceleracao: 40
-  pulo: 11.4
+  pulo: 11.3
   drag: 100
   dragInAir: 1.05
   jumpBufferTime: 0.5

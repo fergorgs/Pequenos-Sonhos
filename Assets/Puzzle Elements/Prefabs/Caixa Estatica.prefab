@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 114608910366177294}
   - component: {fileID: 61399080275551020}
   - component: {fileID: 61930924492742842}
+  - component: {fileID: 7062446303492040638}
   m_Layer: 0
   m_Name: Caixa Estatica
   m_TagString: Caixa
@@ -179,6 +180,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.05, y: 2}
   m_EdgeRadius: 0
+--- !u!95 &7062446303492040638
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025842855503648}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 46cda7e1ad8080a4bac4806267d4b9bb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2052755009576510229
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +210,7 @@ GameObject:
   - component: {fileID: 1998566790869111704}
   - component: {fileID: 3993920237649420856}
   - component: {fileID: 6574253318697304547}
+  - component: {fileID: 1388394269719190673}
   m_Layer: 0
   m_Name: Aurea (1)
   m_TagString: Untagged
@@ -276,3 +297,22 @@ MonoBehaviour:
   father: {fileID: 0}
   period: 2
   minTrans: 0.4
+--- !u!95 &1388394269719190673
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052755009576510229}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 75056806c9fab054ca2f03efb5877f50, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

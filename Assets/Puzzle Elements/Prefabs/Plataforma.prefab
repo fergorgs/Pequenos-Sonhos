@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 61361185570930064}
   - component: {fileID: 120251525619864036}
   - component: {fileID: 601140754}
+  - component: {fileID: 3482290783667470238}
   m_Layer: 0
   m_Name: Plataforma
   m_TagString: Plataforma
@@ -106,6 +107,7 @@ MonoBehaviour:
   timeMov: 4
   activationDelay: 0.2
   timeToKillLine: 2
+  changeCamera: 0
 --- !u!114 &114970504652099612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +272,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5, y: 1.5}
   m_EdgeRadius: 0
+--- !u!95 &3482290783667470238
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055568287922162}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 87fce7efc5c84ea42ac050d2993075b5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2736573321617177087
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +302,7 @@ GameObject:
   - component: {fileID: 8778072608808878072}
   - component: {fileID: 8879261977704195488}
   - component: {fileID: 451253810251046844}
+  - component: {fileID: 2589059359574455321}
   m_Layer: 0
   m_Name: Aurea
   m_TagString: Untagged
@@ -367,3 +389,22 @@ MonoBehaviour:
   father: {fileID: 0}
   period: 2
   minTrans: 0.4
+--- !u!95 &2589059359574455321
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2736573321617177087}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2891c16edbe7dd341b7ae322e4061a48, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
