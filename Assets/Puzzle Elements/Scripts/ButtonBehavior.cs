@@ -47,10 +47,10 @@ public class ButtonBehavior : MonoBehaviour {
             Activate();
             animator.SetTrigger("buttonPressed");
         }
-        else if (bird != null)
+        /*else if (bird != null)
         {
             bird.GetComponent<IdleBehavior>().moveToPress(gameObject);
-        }
+        }*/
     }
 
     void OnTriggerEnter2D(Collider2D col) {

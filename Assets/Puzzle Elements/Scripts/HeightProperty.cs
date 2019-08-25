@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HeightProperty : MonoBehaviour {
-
+	
     public float GetHeight() {
 
         if (tag == "Inimigo")
@@ -11,7 +11,7 @@ public class HeightProperty : MonoBehaviour {
         if (tag == "Caixa Empurravel")
             return 2;
         if (tag == "Player")
-            return 2.8f;
+            return 4;
 
         return 0;
     }

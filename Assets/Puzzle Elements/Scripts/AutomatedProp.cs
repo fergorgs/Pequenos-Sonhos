@@ -34,6 +34,9 @@ public class AutomatedProp : MonoBehaviour {
 
 	private Vector3 copyPos;
 
+	//private GameObject auraChild;
+	//private Vector3 actualPos;
+
 
 	private void Start()
     {
@@ -54,6 +57,8 @@ public class AutomatedProp : MonoBehaviour {
 		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 
 		copyPos = transform.position;
+
+
 
 	}
 
@@ -84,6 +89,24 @@ public class AutomatedProp : MonoBehaviour {
     }
 
     private void Update() {
+
+		//Debug.Log("pos = " + transform.position);
+		Transform[] childrenTrns;
+		childrenTrns = GetComponentsInChildren<Transform>();
+
+		for(int i = 0; i < childrenTrns.Length; i++)
+		{
+			if (childrenTrns[i].gameObject.tag == "Player")
+			{
+				gameObject.layer = 0;
+
+				//Physics2D.Raycast()
+				break;
+			}
+			else
+				gameObject.layer = 12;
+		}
+
         currentPos = transform.position;
 
         if(lird!=null)
@@ -123,7 +146,7 @@ public class AutomatedProp : MonoBehaviour {
                     else if (currentPos == finalPosition)
                         StartCoroutine(MoveProp(startPosition));
                 }
-                else if (btnsActive /*&& wrdSftScr.worldIsReal() == sftBeh.GetIsReal()*/)
+                else if (btnsActive)
                 {
                     activated = true;
                     lird.enabled = true;
@@ -134,7 +157,7 @@ public class AutomatedProp : MonoBehaviour {
 
             case Type.LoopOnce:
 
-                if (currentPos == startPosition && btnsActive /*&& wrdSftScr.worldIsReal() == sftBeh.GetIsReal()*/)
+                if (currentPos == startPosition && btnsActive)
                 {
                     StartCoroutine(MoveProp(finalPosition));
                     lird.enabled = true;
@@ -147,7 +170,7 @@ public class AutomatedProp : MonoBehaviour {
 
             case Type.SingleMovement:
 
-                if (btnsActive /*&& wrdSftScr.worldIsReal() == sftBeh.GetIsReal()*/)
+                if (btnsActive)
                 {
                     lird.enabled = true;
 					StartCoroutine(ChangeCameraFocus());

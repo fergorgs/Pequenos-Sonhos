@@ -19,8 +19,7 @@ public class IdleBehavior : MonoBehaviour {
 
     private PlayerBehavior.States plrState;
     private PlayerBehavior.Sides plrSide;
-
-    /*public GameObject btn;*/
+	
     private Transform btnCoord;
 
     private Vector3 anchorPoint;
@@ -57,13 +56,70 @@ public class IdleBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        //if (birdState == States.Idle)
-        //{
-            plrSide = plrBhr.get_facing();
-            
-            plrState = plrBhr.get_playerState();
 
-            if (plrSide == PlayerBehavior.Sides.Direita) {
+		if (!Player.GetComponent<SpriteRenderer>().flipX)
+		{
+			Debug.Log("Not fliped");
+			anchorPoint = Player.transform.position + new Vector3(-1, 2, 0);
+			GetComponent<SpriteRenderer>().flipX = false;
+		}
+		else
+		{
+			Debug.Log("Fliped");
+			anchorPoint = Player.transform.position + new Vector3(1, 2, 0);
+			GetComponent<SpriteRenderer>().flipX = true;
+		}
+
+		if (Mathf.Abs(Player.GetComponent<Rigidbody2D>().velocity.x) < 0.3f)
+		{
+			idlePoint1 = anchorPoint + new Vector3(0, idleAmplitude, 0);
+			idlePoint2 = anchorPoint + new Vector3(0, -idleAmplitude, 0);
+
+			if (idleGoingDown)
+			{
+				transform.position = Vector3.SmoothDamp(transform.position, idlePoint2, ref velocity, idleSpeed);
+				if (transform.position.y < idlePoint2.y + idleLimitTolerance)
+					idleGoingDown = false;
+			}
+			else
+			{
+				transform.position = Vector3.SmoothDamp(transform.position, idlePoint1, ref velocity, idleSpeed);
+				if (transform.position.y > idlePoint1.y - idleLimitTolerance)
+					idleGoingDown = true;
+			}
+		}
+		else
+			transform.position = Vector3.SmoothDamp(transform.position, anchorPoint, ref velocity, movementDelay);
+
+		if (!isReal)
+		{
+			if (wrdSwtScr.worldHasShifted())
+			{
+				if (wrdSwtScr.worldIsReal())
+					sprd.color = new Color(1, 1, 1, 0.3f);
+				else
+					sprd.color = Color.white;
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//---------------------------ANTIGO---------------------------------------------------
+		plrSide = plrBhr.get_facing();
+           
+        plrState = plrBhr.get_playerState();
+
+        if (plrSide == PlayerBehavior.Sides.Direita) {
             anchorPoint = Player.transform.position + new Vector3(-1, 2, 0);
             GetComponent<SpriteRenderer>().flipX = false;
         }
@@ -103,13 +159,6 @@ public class IdleBehavior : MonoBehaviour {
                     sprd.color = Color.white;
             }
         }
-    }
-    
-    public void moveToPress(GameObject gmObject)
-    {
-        /*btn = gmObject;
-        btnCoord = btn.transform;
-        birdState = States.PressingBtn;*/
     }
 
 }

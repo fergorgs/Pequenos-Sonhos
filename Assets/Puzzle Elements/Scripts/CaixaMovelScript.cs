@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CaixaMovelScript : MonoBehaviour {
 
+	public float drag = 2;
     private Rigidbody2D rb2d;
     private AudioSource sfx;
     private Collider2D col;
@@ -21,20 +22,22 @@ public class CaixaMovelScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if((sfx.isPlaying && (rb2d.velocity.x == 0) || rb2d.velocity.y != 0)) {
+		if((sfx.isPlaying && (rb2d.velocity.x == 0) || Mathf.Abs(rb2d.velocity.y) > 0.3f)) {
             sfx.Stop();
-        }else if(rb2d.velocity.x != 0 && !sfx.isPlaying && rb2d.velocity.y == 0) {
+        }else if(rb2d.velocity.x != 0 && !sfx.isPlaying && Mathf.Abs(rb2d.velocity.y) < 0.3f) {
             sfx.Play();
         }
 
         if (wcs.worldIsReal() != sftBh.GetIsReal())
             sfx.Stop();
 
-        if(transform.parent != null && transform.parent.tag == "Plataforma")
+		rb2d.AddForce(new Vector2(-drag * rb2d.velocity.x, 0));
+
+		/*if(transform.parent != null && transform.parent.tag == "Plataforma")
             onPlatform = true;
         else
-            onPlatform = false;
-    }
+            onPlatform = false;*/
+	}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -49,7 +52,7 @@ public class CaixaMovelScript : MonoBehaviour {
         else */if (collision.CompareTag("Player") && rb2d.velocity.y == 0)
         {
             sfx.Play();
-            collision.GetComponent<Collider2D>().transform.SetParent(transform);
+            //collision.GetComponent<Collider2D>().transform.SetParent(transform);
         }
 
     }
@@ -76,6 +79,6 @@ public class CaixaMovelScript : MonoBehaviour {
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), col.gameObject.GetComponent<Collider2D>(), true);
             noCollision = true;
         }*/
-        collision.GetComponent<Collider2D>().transform.SetParent(null);
+        //collision.GetComponent<Collider2D>().transform.SetParent(null);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerBehavior : MonoBehaviour
 {
-
+	
     public enum States { Pulando, Andando, Parado, Empurrando, Pickup };
     public enum Sides { Direita, Esquerda };
 
@@ -98,7 +98,7 @@ public class PlayerBehavior : MonoBehaviour
 
 				rb2d.velocity = new Vector2(0, yVel);
 
-				if (SimpleInput.GetAxis("Vertical") > 0f /*|| jumpBuffer == true*/ || Input.GetKey(KeyCode.UpArrow))
+				if (SimpleInput.GetAxis("Vertical") > 0f || Input.GetKey(KeyCode.UpArrow))
 				{
 					rb2d.velocity = new Vector2(0, (float)pulo);
 					onGround = false;
@@ -177,17 +177,7 @@ public class PlayerBehavior : MonoBehaviour
 					grassSteps.Pause();
 				//COMPORTAMENTO
 				//animação = pulando
-
-				/*if(Time.time - startJumpTime < jumpTol)
-				{
-					if (Input.GetKey(KeyCode.UpArrow) || SimpleInput.GetAxis("Vertical") > 0f)
-					{
-						rb2d.velocity = new Vector2(xVel, (float)pulo);
-						yVel = (float)pulo;
-						Debug.Log("Haaay");
-					}
-					Debug.Log("Sup");
-				}*/
+				
 					
 
 
@@ -291,7 +281,7 @@ public class PlayerBehavior : MonoBehaviour
 					playerState = States.Pulando;
 					startJumpTime = Time.time;
 				}
-                else if (empurrando == false || !GettingInput()/*(xVel > -tol && xVel < tol)*/)
+                else if (empurrando == false || !GettingInput())
                     playerState = States.Parado;
                 else if (Input.GetKeyDown(KeyCode.P))
                     playerState = States.Pickup;
@@ -322,7 +312,7 @@ public class PlayerBehavior : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (/*transform.parent.tag == "Caixa Empurravel"*/col.gameObject.tag == "Caixa Empurravel")
+        if (col.gameObject.tag == "Caixa Empurravel")
         {
             empurrando = true;
         }
@@ -374,5 +364,5 @@ public class PlayerBehavior : MonoBehaviour
         else
             return false;
     }
-
+	
 }

@@ -22,7 +22,7 @@ public class ChangeCameraFocus : MonoBehaviour
 	{
 		if (changeCamera)
 		{
-			Debug.Log("Hey 1");
+			//Debug.Log("Hey 1");
 			if (GetComponent<ButtonBehavior>().IsActive())
 			{
 				Debug.Log("Hey 2");

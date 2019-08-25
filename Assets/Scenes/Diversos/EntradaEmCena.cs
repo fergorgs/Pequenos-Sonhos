@@ -6,6 +6,7 @@ public class EntradaEmCena : MonoBehaviour {
 
     public Camera cam;
     public PlayerBehavior pb;
+	public PlayerControllingScript pc;
     public Vector3 posFin;
     public float timeToWait = 2f;
     public Canvas canvas;
@@ -15,7 +16,7 @@ public class EntradaEmCena : MonoBehaviour {
 
         cam.GetComponent<SmoothCameraScript>().enabled = false;
         canvas.enabled = false;
-        StartCoroutine(Entrada(pb.transform.position, posFin, pb.maxVel));
+        StartCoroutine(Entrada(pc.transform.position, posFin, pc.maxVelocity));
 	}
 	
 	// Update is called once per frame
@@ -31,10 +32,10 @@ public class EntradaEmCena : MonoBehaviour {
         {
             //Debug.Log("O2i");
 
-            pb.set_playerState(PlayerBehavior.States.Andando);
-            pb.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector3(speed, 0f, 0);  
+           // pb.set_playerState(PlayerBehavior.States.Andando);
+            pc.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector3(speed, 0f, 0);  
             t += step;
-            pb.transform.position = Vector3.Lerp(posIni, posFin, t);
+            pc.transform.position = Vector3.Lerp(posIni, posFin, t);
             yield return new WaitForFixedUpdate();
         }
         cam.GetComponent<SmoothCameraScript>().enabled = true;

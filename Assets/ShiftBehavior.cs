@@ -152,6 +152,7 @@ public class ShiftBehavior : MonoBehaviour
 
 	void OnMouseUp()
     {
+		Debug.Log("Clicked");
 		if (gameObject.name == "Caixa_E")
 		{
 			if (!pauseScript.IsPaused())
