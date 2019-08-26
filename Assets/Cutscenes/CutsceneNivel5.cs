@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CutsceneNivel5 : MonoBehaviour {
 
     public PlayerBehavior pb;
+	public PlayerControllingScript pc;
     public GameObject bird, birdPuppet, casa, smoke;
     public Vector3 finalPos;
     public Vector3 finalPos2;
@@ -27,7 +28,7 @@ public class CutsceneNivel5 : MonoBehaviour {
             for (int i = 0; i < uiButtons.Length; i++)
                 Destroy(uiButtons[i]);
 
-            StartCoroutine(Cutscene(pb.transform.position, finalPos, finalPos2, pb.maxVel));
+            StartCoroutine(Cutscene(pc.transform.position, finalPos, finalPos2, pc.maxVelocity));
         }
     }
 
@@ -109,9 +110,9 @@ public class CutsceneNivel5 : MonoBehaviour {
         float t = 0;
         while (t <= 1.0f)
         {
-            pb.rb2d.velocity = new Vector2(speed, 0f);
+            pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             t += step;
-            pb.transform.position = Vector2.Lerp(a, b, t);
+            pc.transform.position = Vector2.Lerp(a, b, t);
             yield return new WaitForFixedUpdate();
         }
         //---------------------------------------------------------------
@@ -125,22 +126,22 @@ public class CutsceneNivel5 : MonoBehaviour {
         //---------------------------------------------------------------------
         //-------------Movimentação Final-----------------------------------------------
         //cam.GetComponent<SmoothCameraScript>().enabled = false;
-        pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
+        //pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
         float step2 = (speed / (b - c).magnitude) * Time.fixedDeltaTime;
         float d = 0;
         while (d <= 1.0f)
         {
-            pb.rb2d.velocity = new Vector2(speed, 0f);
+			pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             d += step;
-            pb.transform.position = Vector2.Lerp(b, c, d);
+            pc.transform.position = Vector2.Lerp(b, c, d);
             yield return new WaitForFixedUpdate();
         }
 
         //-------------------------Entra na casa-----------------------------
         casa.GetComponent<SpriteRenderer>().sprite = portaAberta;
-        StartCoroutine(ChangeAlpha(pb.gameObject, Color.white, Color.clear, 2));
-        pb.gameObject.GetComponent<ParticleSystem>().Stop();
-        pb.gameObject.GetComponent<ParticleSystem>().Clear();
+        StartCoroutine(ChangeAlpha(pc.gameObject, Color.white, Color.clear, 2));
+        pc.gameObject.GetComponent<ParticleSystem>().Stop();
+        pc.gameObject.GetComponent<ParticleSystem>().Clear();
         yield return new WaitForSeconds(2f);
         casa.GetComponent<SpriteRenderer>().sprite = portaFechada;
         yield return new WaitForSeconds(2f);
@@ -216,9 +217,9 @@ public class CutsceneNivel5 : MonoBehaviour {
     private void Update()
     {
 
-        if (wrdCont.worldIsReal() && pb.get_playerState() == PlayerBehavior.States.Andando)
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        else
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
-    }
+		if (wrdCont.worldIsReal() && Mathf.Abs(pc.GetComponent<Rigidbody2D>().velocity.y) < 0.5f)//pb.get_playerState() == PlayerBehavior.States.Andando)
+			gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+		else
+			gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+	}
 }

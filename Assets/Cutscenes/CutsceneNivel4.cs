@@ -8,6 +8,7 @@ public class CutsceneNivel4 : MonoBehaviour {
     public WorldSwitchScript wrdCont;
 
     public PlayerBehavior pb;
+	public PlayerControllingScript pc;
     public GameObject estatua, particula, particula2, particula3, bird, birdPuppet;
     public Vector3 finalPos;
     public Vector3 finalPos2;
@@ -39,7 +40,7 @@ public class CutsceneNivel4 : MonoBehaviour {
                 moveButtons[i].GetComponent<Image>().raycastTarget = false;
             SwitchButton.GetComponent<Image>().raycastTarget = false;
 
-            StartCoroutine(Cutscene(pb.transform.position, finalPos, pb.maxVel));
+            StartCoroutine(Cutscene(pc.transform.position, finalPos, pc.maxVelocity));
         }
     }
 
@@ -66,37 +67,40 @@ public class CutsceneNivel4 : MonoBehaviour {
         float t = 0;
         while (t <= 1.0f)
         {
-            pb.rb2d.velocity = new Vector2(speed, 0f);
+            pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             t += step;
-            pb.transform.position = Vector2.Lerp(a, b, t);
+            pc.transform.position = Vector2.Lerp(a, b, t);
             yield return new WaitForFixedUpdate();
         }
 
 		wrdCont.BgMusic.enabled = false;
 		wrdCont.DreamMusic.enabled = false;
 		SwitchButton.GetComponent<Image>().raycastTarget = true;
-        //---------------------------------------------------------------
-        //--------Troca sprites-------------------------------------------
-        //THROW 1
-        particula.SetActive(true);
-        pb.animator.Play("Player_Throw");
-        pb.GetComponent<ParticleSystem>().maxParticles--;
-        pb.GetComponent<ParticleSystem>().Clear();
-        pb.GetComponent<ParticleSystem>().Play();
+		//---------------------------------------------------------------
+		//--------Troca sprites-------------------------------------------
+		yield return new WaitForSeconds(2f);
+		//THROW 1
+		particula.SetActive(true);
+        pc.GetComponent<Animator>().Play("Player_Throw");
+        pc.GetComponent<ParticleSystem>().maxParticles--;
+        pc.GetComponent<ParticleSystem>().Clear();
+        pc.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(3f);
         Destroy(particula);
+		yield return new WaitForSeconds(3f);
 
-        //THROW 2
-        particula2.SetActive(true);
-        pb.animator.Play("Player_Throw");
-        pb.GetComponent<ParticleSystem>().maxParticles--;
-        pb.GetComponent<ParticleSystem>().Clear();
-        pb.GetComponent<ParticleSystem>().Play();
-        yield return new WaitForSeconds(3f);
+		//THROW 2
+		particula2.SetActive(true);
+		pc.GetComponent<Animator>().Play("Player_Throw");
+		pc.GetComponent<ParticleSystem>().maxParticles--;
+		pc.GetComponent<ParticleSystem>().Clear();
+		pc.GetComponent<ParticleSystem>().Play();
+		yield return new WaitForSeconds(3f);
         Destroy(particula2);
+		yield return new WaitForSeconds(3f);
 
-        //THROW 3
-        /*particula3.SetActive(true);
+		//THROW 3
+		/*particula3.SetActive(true);
         pb.animator.Play("Player_Throw");
         pb.GetComponent<ParticleSystem>().maxParticles--;
         pb.GetComponent<ParticleSystem>().Clear();
@@ -104,18 +108,18 @@ public class CutsceneNivel4 : MonoBehaviour {
         yield return new WaitForSeconds(3f);
         Destroy(particula3);*/
 
-        //Triste
-        yield return new WaitForSeconds(2f);
-        pb.GetComponent<SpriteRenderer>().flipX = true;
-        pb.animator.Play("Triste");
-        yield return new WaitForSeconds(1f);
+		//Triste
+		yield return new WaitForSeconds(3f);
+        pc.GetComponent<SpriteRenderer>().flipX = true;
+        pc.GetComponent<Animator>().Play("Triste");
+        //yield return new WaitForSeconds(1f);
 
         //Bird Movement
         birdPuppet.SetActive(true);
         bird.SetActive(false);
         birdPuppet.GetComponent<SpriteRenderer>().flipX = true;
         birdPuppet.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
         birdPuppet.GetComponent<Animator>().Play("BirdTriste");
         birdPuppet.GetComponent<SpriteRenderer>().flipX = false;
 
@@ -147,18 +151,20 @@ public class CutsceneNivel4 : MonoBehaviour {
 
         //-------------Movimentação Final-----------------------------
         //Debug.Log("Ok");
-        pb.set_playerState(PlayerBehavior.States.Parado);
-        pb.animator.Play("Idle_Animation");
-        yield return new WaitForSeconds(2f);
-        pb.set_playerState(PlayerBehavior.States.Andando);
-        pb.animator.Play("Player_Walk");
+        //pb.set_playerState(PlayerBehavior.States.Parado);
+        pc.GetComponent<Animator>().Play("Idle_Animation");
+        yield return new WaitForSeconds(1f);
+		pc.GetComponent<SpriteRenderer>().flipX = false;
+		yield return new WaitForSeconds(3f);
+		//pb.set_playerState(PlayerBehavior.States.Andando);
+		pc.GetComponent<Animator>().Play("Player_Walk");
         float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
         float t = 0;
         while (t <= 1.0f)
         {
-            pb.rb2d.velocity = new Vector2(speed, 0f);
+            pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             t += step;
-            pb.transform.position = Vector2.Lerp(a, b, t);
+            pc.transform.position = Vector2.Lerp(a, b, t);
             yield return new WaitForFixedUpdate();
         }
 
@@ -168,13 +174,13 @@ public class CutsceneNivel4 : MonoBehaviour {
     void Update()
     {
 
-        if (wrdCont.worldIsReal() && pb.get_playerState() == PlayerBehavior.States.Andando)
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        else
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
-        if (ctSh.GetIsReal() && wrdCont.worldIsReal() && !cutS2started)
+		if (wrdCont.worldIsReal() && Mathf.Abs(pc.GetComponent<Rigidbody2D>().velocity.y) < 0.5f)//pb.get_playerState() == PlayerBehavior.States.Andando)
+			gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+		else
+			gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+		if (ctSh.GetIsReal() && wrdCont.worldIsReal() && !cutS2started)
         {
-            StartCoroutine(Cutscene2(pb.transform.position, finalPos2, pb.maxVel));
+            StartCoroutine(Cutscene2(pc.transform.position, finalPos2, pc.maxVelocity));
             cutS2started = true;
         }
     }

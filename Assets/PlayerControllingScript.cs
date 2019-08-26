@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerControllingScript : MonoBehaviour
 {
-	
-
 	//Animations Stuff-----------------------------------
 	public enum AnimStates { Idle, Walking, Jumping, Falling, Pushing, Throwing }
 	private AnimStates animState = AnimStates.Idle;
@@ -18,13 +16,20 @@ public class PlayerControllingScript : MonoBehaviour
 	public float ghostJumpTime = 0.5f, jumpBufferTime = 0.5f;
 	private bool canGhostJump = true, canGhostBuffer = false;
 
-	private bool grounded = true, pushing = false;
+	private bool grounded = true, pushing = false, usingPickUp = false;
+	public bool IsUsingPickUp() { return usingPickUp; }
+	public void SetUsingPickUp(bool val) { usingPickUp = val; }
 
 	//Camponents------------------------------------------
 	private Rigidbody2D rb2d;
 	private RaycastHit2D[] grnHitLeft, grnHitRight, handsHit;
 
+	//Others
 	public LayerMask raycastLayer;
+
+	private bool pickUp = false;
+	public bool HasPickUp() { return pickUp; }
+	public void SetPickUp(bool val) { pickUp = val; }
 
     // Start is called before the first frame update
     void Start()
@@ -43,34 +48,40 @@ public class PlayerControllingScript : MonoBehaviour
 		//-----------------------------------------------------------------------------------------
 		//--------------------------------HORIZONTAL MOVEMENT--------------------------------------
 		//-----------------------------------------------------------------------------------------
-		if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))                  //Walk Left
+		if (!usingPickUp)
 		{
-			if (rb2d.velocity.x > -maxVelocity)
-				rb2d.AddForce(new Vector2(-fowardForce, 0));
-		}
-		else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))            //Walk Right
-		{
-			if (rb2d.velocity.x < maxVelocity)
-				rb2d.AddForce(new Vector2(fowardForce, 0));
-		}
-		else																							//Apply drag
-		{
-			if(grounded)
-				rb2d.AddForce(new Vector2(-grnDrag * rb2d.velocity.x, 0));
-			else
-				rb2d.AddForce(new Vector2(-airDrag * rb2d.velocity.x, 0));
+			if (SimpleInput.GetAxis("Horizontal") < 0f || Input.GetKey(KeyCode.LeftArrow))                  //Walk Left
+			{
+				if (rb2d.velocity.x > -maxVelocity)
+					rb2d.AddForce(new Vector2(-fowardForce, 0));
+			}
+			else if (SimpleInput.GetAxis("Horizontal") > 0f || Input.GetKey(KeyCode.RightArrow))            //Walk Right
+			{
+				if (rb2d.velocity.x < maxVelocity)
+					rb2d.AddForce(new Vector2(fowardForce, 0));
+			}
+			else                                                                                            //Apply drag
+			{
+				if (grounded)
+					rb2d.AddForce(new Vector2(-grnDrag * rb2d.velocity.x, 0));
+				else
+					rb2d.AddForce(new Vector2(-airDrag * rb2d.velocity.x, 0));
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//----------------------------------------JUMP---------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		if (grounded || canGhostJump)
+		if (!usingPickUp)
 		{
-			if (SimpleInput.GetAxis("Vertical") > 0f || Input.GetKey(KeyCode.UpArrow))
+			if (grounded || canGhostJump)
 			{
-				canGhostJump = false;                                                                   //logicamente desnecessario
-				rb2d.velocity = new Vector2(xVel, jumpSpeed);
-				//rb2d.AddForce(new Vector2(0, jumpForce));
+				if (SimpleInput.GetAxis("Vertical") > 0f || Input.GetKey(KeyCode.UpArrow))
+				{
+					canGhostJump = false;                                                                   //logicamente desnecessario
+					rb2d.velocity = new Vector2(xVel, jumpSpeed);
+					//rb2d.AddForce(new Vector2(0, jumpForce));
+				}
 			}
 		}
 
