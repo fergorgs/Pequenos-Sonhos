@@ -1,12 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Advertisements;
 
-using StartApp;
+//using StartApp;
 
 public class AdManagement : MonoBehaviour {
 
-	private bool hasBeenClosed = false;
+	string gameId = "3412316";
+	bool testMode = true;
+
+	bool handled = false;
+
+	void Start()
+	{
+		Debug.Log("script initiating");
+		Advertisement.Initialize(gameId, testMode);
+		Debug.Log("finished initiating");
+	}
+
+	public void DisplayVideo()
+	{
+		Debug.Log("button pressed");
+
+		Advertisement.Show();
+
+	}
+
+	public void DisplayVideo(ShowOptions options)
+	{
+		Debug.Log("button pressed");
+
+		Advertisement.Show(options);
+		
+	}
+
+	/*private bool hasBeenClosed = false;
 
 	public GameObject blackWall;
 
@@ -46,5 +75,5 @@ public class AdManagement : MonoBehaviour {
 		else
 			return false;
 
-	}
+	}*/
 }

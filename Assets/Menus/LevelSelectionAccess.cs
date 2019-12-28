@@ -10,39 +10,62 @@ public class LevelSelectionAccess : MonoBehaviour {
 	private string curLevelPath;
 	private int curLevel = 0;
 
+	private int highestLevel = 0;
+
 	// Use this for initialization
 	void Start () {
-		
+
+		highestLevel = PlayerPrefs.GetInt("HighestLevel", 0);
+	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 		curLevelPath = PlayerPrefs.GetString("CurrentLevel");
-
+	
 		switch (curLevelPath)
 		{
-			case ("Assets/Scenes/Nivel 0.unity"):
-				curLevel = 0;
-				break;
+			/*case ("Assets/Scenes/Nivel 0.unity"):
+				if()
+				break;*/
 			case ("Assets/Scenes/Nivel 1.unity"):
-				curLevel = 1;
+				if (1 > highestLevel)
+				{
+					highestLevel = 1;
+					PlayerPrefs.SetInt("HighestLevel", 1);
+				}
 				break;
 			case ("Assets/Scenes/Nivel 2.unity"):
-				curLevel = 2;
+				if (2 > highestLevel)
+				{
+					highestLevel = 2;
+					PlayerPrefs.SetInt("HighestLevel", 2);
+				}
 				break;
 			case ("Assets/Scenes/Nivel 3.unity"):
-				curLevel = 3;
+				if (3 > highestLevel)
+				{
+					highestLevel = 3;
+					PlayerPrefs.SetInt("HighestLevel", 3);
+				}
 				break;
 			case ("Assets/Scenes/Nivel 4.unity"):
-				curLevel = 4;
+				if (4 > highestLevel)
+				{
+					highestLevel = 4;
+					PlayerPrefs.SetInt("HighestLevel", 4);
+				}
 				break;
 			case ("Assets/Scenes/Nivel 5.unity"):
-				curLevel = 5;
+				if (5 > highestLevel)
+				{
+					highestLevel = 5;
+					PlayerPrefs.SetInt("HighestLevel", 5);
+				}
 				break;
 		}
-
-		//Debug.Log("curLevel = " + curLevel);
+		
 		switch (nivel)
 		{
 			case (0):
@@ -53,7 +76,7 @@ public class LevelSelectionAccess : MonoBehaviour {
 
 			case (1):
 
-				if (curLevel >= 1)
+				if (highestLevel >= 1)
 				{
 					GetComponent<Button>().interactable = true;
 					GetComponent<Image>().color = Color.white;
@@ -68,7 +91,7 @@ public class LevelSelectionAccess : MonoBehaviour {
 			case (2):
 
 
-				if (curLevel >= 2)
+				if (highestLevel >= 2)
 				{
 					GetComponent<Button>().interactable = true;
 					GetComponent<Image>().color = Color.white;
@@ -83,7 +106,7 @@ public class LevelSelectionAccess : MonoBehaviour {
 			case (3):
 
 
-				if (curLevel >= 3)
+				if (highestLevel >= 3)
 				{
 					//Debug.Log("Cima");
 					GetComponent<Button>().interactable = true;
@@ -100,7 +123,7 @@ public class LevelSelectionAccess : MonoBehaviour {
 			case (4):
 
 
-				if (curLevel >= 4)
+				if (highestLevel >= 4)
 				{
 					GetComponent<Button>().interactable = true;
 					GetComponent<Image>().color = Color.white;
@@ -115,7 +138,7 @@ public class LevelSelectionAccess : MonoBehaviour {
 			case (5):
 
 
-				if (curLevel >= 5)
+				if (highestLevel >= 5)
 				{
 					GetComponent<Button>().interactable = true;
 					GetComponent<Image>().color = Color.white;
@@ -126,8 +149,6 @@ public class LevelSelectionAccess : MonoBehaviour {
 					GetComponent<Image>().color = new Color(0.6f, 0.6f, 0.6f, 1);
 				}
 				break;
-
-
 		}
 	}
 }

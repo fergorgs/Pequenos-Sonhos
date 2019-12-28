@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using StartApp;
+using UnityEngine.Advertisements;
 
 public class SceneSwitch : MonoBehaviour
 {
@@ -15,23 +16,25 @@ public class SceneSwitch : MonoBehaviour
     private string path;
 	private int curLevel = 0;
 	private int highestLevel = 0;
-    public GameObject loadingScreenObj, adsObj, yesButton, noButton, startButton;
+	public GameObject loadingScreenObj, adsObj, yesButton, noButton; //startButton;
 	public GameObject title, btnsDefault, btnsLang, bird;
     public Slider slider;
 	public GameObject AdsBlackWall;
 
+	public GameObject AdManager;
+
     AsyncOperation async;
 
-	InterstitialAd ad;
+	//InterstitialAd ad;
 
 
 
 	// Use this for initialization
 	void Start()
     {
-		ad = AdSdk.Instance.CreateInterstitial();
+		//ad = AdSdk.Instance.CreateInterstitial();
 
-		ad.LoadAd(InterstitialAd.AdType.Automatic);
+		//ad.LoadAd(InterstitialAd.AdType.Automatic);
 
 		path = "Assets/Scenes/" + sceneName + ".unity";
 
@@ -130,15 +133,19 @@ public class SceneSwitch : MonoBehaviour
     }
     
     public void Continue() {
-        if(!PlayerPrefs.GetString("CurrentLevel").Equals("Assets / Scenes /Menu.unity"))
-            LoadScreen(PlayerPrefs.GetString("CurrentLevel"));
+		if (!PlayerPrefs.GetString("CurrentLevel").Equals("Assets / Scenes /Menu.unity"))
+		{
+			//Debug.Log(PlayerPrefs.GetString("CurrentLevel"));
+			path = PlayerPrefs.GetString("CurrentLevel");
+			LoadScreen(path);
+		}
     }
 
     public void TurnOnOffAds(int activate) {
         PlayerPrefs.SetInt("AdsOn", activate);
 		/*if (activate == 1)
 			ads.ShowRewardedAd();*/
-		LoadScreen("Nivel 0");
+		LoadScreen(path);
         yesButton.SetActive(false);
         noButton.SetActive(false);
         //startButton.SetActive(true);*/
@@ -182,7 +189,10 @@ public class SceneSwitch : MonoBehaviour
 
 	public void ShowAdd(string lvlName)
 	{
-		ad.RaiseAdLoaded += (sender, e) => {
+		var options = new ShowOptions { resultCallback = HandleShowResult };
+
+		AdManager.GetComponent<AdManagement>().DisplayVideo(options);
+		/*ad.RaiseAdLoaded += (sender, e) => {
 			ad.ShowAd();
 		};
 
@@ -194,7 +204,25 @@ public class SceneSwitch : MonoBehaviour
 
 		ad.RaiseAdClicked += (sender, e) => StartCoroutine(LoadingScreen(lvlName));
 
-		ad.LoadAd(InterstitialAd.AdType.Automatic);
+		ad.LoadAd(InterstitialAd.AdType.Automatic);*/
 
+	}
+
+	private void HandleShowResult(ShowResult result)
+	{
+		switch (result)
+		{
+			case ShowResult.Finished:
+				Debug.Log("one called | path: " + path);
+				StartCoroutine(LoadingScreen(path));
+				break;
+			case ShowResult.Skipped:
+				Debug.Log("The ad was skipped before reaching the end.");
+				break;
+			case ShowResult.Failed:
+				Debug.Log("three called | path: " + path);
+				StartCoroutine(LoadingScreen(path));
+				break;
+		}
 	}
 }
