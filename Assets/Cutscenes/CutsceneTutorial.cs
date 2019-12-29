@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class CutsceneTutorial : MonoBehaviour {
 
+	public PlayerControllingScript pcs;
     public PlayerBehavior pb;
     public Vector2 finalPos;
     public Vector2 finalPos2;
@@ -39,7 +40,8 @@ public class CutsceneTutorial : MonoBehaviour {
             if (!isRuning)
             {
                 canvas.enabled = false;
-                StartCoroutine(MoveCharacter(pb.transform.position, finalPos, pb.maxVel));
+				StartCoroutine(MoveCharacter(pcs.transform.position, finalPos, pcs.maxVelocity));
+				//StartCoroutine(MoveCharacter(pb.transform.position, finalPos, pb.maxVel));
                 //canvas.enabled = true;
             }
         }
@@ -65,18 +67,24 @@ public class CutsceneTutorial : MonoBehaviour {
     {
         float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
         float t = 0;
+
         while (t <= 1.0f)
         {
             isRuning = true;
-            pb.rb2d.velocity = new Vector2(speed, 0f);
-            t += step;
-            pb.transform.position = Vector2.Lerp(a, b, t);
-            yield return new WaitForFixedUpdate();
+			//pb.rb2d.velocity = new Vector2(speed, 0f);
+			pcs.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
+			t += step;
+			//pb.transform.position = Vector2.Lerp(a, b, t);
+			pcs.transform.position = Vector2.Lerp(a, b, t);
+			yield return new WaitForFixedUpdate();
         }
-        pb.rb2d.velocity = Vector2.zero;
-        isRuning = false;
+
+		//pb.rb2d.velocity = Vector2.zero;
+		pcs.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+		isRuning = false;
         mCamera.GetComponent<SmoothCameraScript>().enabled = false;
-        if (!isRuning && !doneOnce)
+
+		if (!isRuning && !doneOnce)
         {
             doneOnce = true;
             StartCoroutine(MoveCamera(mCamera.transform.position, finalPosCamera, 3f));
@@ -106,13 +114,14 @@ public class CutsceneTutorial : MonoBehaviour {
         mCamera.GetComponent<SmoothCameraScript>().enabled = true;
         yield return new WaitForSeconds(0.5f);
         mCamera.GetComponent<SmoothCameraScript>().enabled = false;
-        pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
-        StartCoroutine(MoveCharacter(finalPos, finalPos2, pb.maxVel)); 
-    }
+		//pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
+		//StartCoroutine(MoveCharacter(finalPos, finalPos2, pb.maxVel)); 
+		StartCoroutine(MoveCharacter(finalPos, finalPos2, pcs.maxVelocity));
+	}
 
     private void Update()
     {
-        if (wrdCont.worldIsReal() && pb.get_playerState() == PlayerBehavior.States.Andando)
+        if (wrdCont.worldIsReal() && Mathf.Abs(pcs.GetComponent<Rigidbody2D>().velocity.y) < 0.5)//pb.get_playerState() == PlayerBehavior.States.Andando)
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         else
             gameObject.GetComponent<BoxCollider2D>().isTrigger = false;

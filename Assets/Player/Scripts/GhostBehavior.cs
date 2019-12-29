@@ -23,10 +23,9 @@ public class GhostBehavior : MonoBehaviour
     private float yDist;
 
 	private Vector3 lastRealPos;
-
-    public Sprite[] sprites;
+	
     private bool changed = false;
-    private PlayerBehavior pb;
+	private PlayerBehavior pb;
     // Use this for initialization
     void Start()
     {
@@ -34,7 +33,7 @@ public class GhostBehavior : MonoBehaviour
             wrdControl = GameObject.FindGameObjectWithTag("WCS");
 
         wrdCont = wrdControl.GetComponent<WorldSwitchScript>();
-        pb = GameObject.FindWithTag("Player").GetComponent<PlayerBehavior>();
+		pb = GameObject.FindWithTag("Player").GetComponent<PlayerBehavior>();
         plrTrfm = player.GetComponent<Transform>();
         trfm = GetComponent<Transform>();
         sprd = GetComponent<SpriteRenderer>();
@@ -73,10 +72,10 @@ public class GhostBehavior : MonoBehaviour
                 rb2d.simulated = true;
 				rb2d.gravityScale = 1;
 				//sprd.sprite = sprites[(int)pb.get_playerState()];
-				if (pb.GetComponent<SpriteRenderer>().flipX)
+				/*if (pb.GetComponent<SpriteRenderer>().flipX)
                     sprd.flipX = true;
                 else
-                    sprd.flipX = false;
+                    sprd.flipX = false;*/
                 changed = true;
             }
 

@@ -44,12 +44,15 @@ public class Tutorial_P3 : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		if(!firstTouch)
+			GetComponent<BoxCollider2D>().isTrigger = wrdScript.worldIsReal();
 	}
 
 	private IEnumerator Cutscene()
 	{
 		caixaOrigPos = caixa.transform.position;
+
+		caixa.GetComponent<ShiftBehavior>().isShiftable = true;
 
 		Mao1.SetActive(true);
 
