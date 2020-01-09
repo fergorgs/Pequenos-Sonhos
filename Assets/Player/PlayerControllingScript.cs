@@ -24,7 +24,13 @@ public class PlayerControllingScript : MonoBehaviour
 	private Rigidbody2D rb2d;
 	private RaycastHit2D[] grnHitLeft, grnHitRight, handsHit;
 
-	//Others
+	//Sound Effects---------------------------------------
+	public AudioSource passos, landing;
+	public AudioSource[] jumping;
+
+	private bool foundTile = true, groundedBuffer = true;
+
+	//Others----------------------------------------------
 	public LayerMask raycastLayer;
 
 	private bool pickUp = false;
@@ -96,6 +102,7 @@ public class PlayerControllingScript : MonoBehaviour
 			handsHit = Physics2D.RaycastAll(transform.position, Vector2.left, 0.63f);
 
 		bool foundGround = false, foundBox = false;
+		foundTile = false;
 
 		if (grnHitLeft.Length > 0)																				//Left Foot Raycast
 		{
@@ -104,6 +111,9 @@ public class PlayerControllingScript : MonoBehaviour
 				if (!grnHitLeft[i].collider.isTrigger)
 				{
 					foundGround = true;
+					if (grnHitLeft[i].collider.gameObject.CompareTag("Tile"))
+						foundTile = true;
+
 					break;
 				}
 			}
@@ -115,6 +125,9 @@ public class PlayerControllingScript : MonoBehaviour
 				if (!grnHitRight[i].collider.isTrigger)
 				{
 					foundGround = true;
+					if (grnHitRight[i].collider.gameObject.CompareTag("Tile"))
+						foundTile = true;
+
 					break;
 				}
 			}
@@ -173,8 +186,34 @@ public class PlayerControllingScript : MonoBehaviour
 			GetComponent<SpriteRenderer>().flipX = false;
 		else if (rb2d.velocity.x < -0.3f)
 			GetComponent<SpriteRenderer>().flipX = true;
-	}
 
+
+		//-----------------------------------------------------------------------------------------
+		//------------------------------------SOUND EFFECTS----------------------------------------
+		//-----------------------------------------------------------------------------------------
+		
+		if (!usingPickUp)
+		{
+			//Passos
+			//if ((SimpleInput.GetAxis("Horizontal") != 0f || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) && (grounded && foundTile))
+			if(animState == AnimStates.Walking)
+			{
+				if(!passos.isPlaying)
+					passos.Play();
+			}
+			else
+				passos.Pause();
+
+			//Pulo
+			if((grounded || canGhostJump) && (SimpleInput.GetAxis("Vertical") > 0f || Input.GetKey(KeyCode.UpArrow)))
+				jumping[(int)Random.Range(0, 3)].Play();
+
+			//Landing
+			if (grounded != groundedBuffer && grounded)
+				landing.Play();
+			groundedBuffer = grounded;
+		}
+	}
 
 
 
