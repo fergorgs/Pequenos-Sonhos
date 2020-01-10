@@ -11,6 +11,7 @@ public class CutsceneTutorial : MonoBehaviour {
     public PlayerBehavior pb;
     public Vector2 finalPos;
     public Vector2 finalPos2;
+	public Vector2 finalPos3;
     public Vector3 finalPosCamera;
     public GameObject title;
     public Camera mCamera;
@@ -26,6 +27,9 @@ public class CutsceneTutorial : MonoBehaviour {
 
     private bool doneOnce = false;
 
+	public Vector3 initialCamPos, /*finalCamPos,*/ keyPlayerPos;
+
+
     AsyncOperation async;
 
     private void Start()
@@ -40,13 +44,54 @@ public class CutsceneTutorial : MonoBehaviour {
             if (!isRuning)
             {
                 canvas.enabled = false;
-				StartCoroutine(MoveCharacter(pcs.transform.position, finalPos, pcs.maxVelocity));
+				StartCoroutine(Cutscene(pcs.transform.position, finalPos, finalPos2, pcs.maxVelocity));
+				//StartCoroutine(MoveCharacter(pcs.transform.position, finalPos, pcs.maxVelocity));
 				//StartCoroutine(MoveCharacter(pb.transform.position, finalPos, pb.maxVel));
                 //canvas.enabled = true;
             }
         }
     }
-    private IEnumerator MoveCamera(Vector3 a, Vector3 b, float speed)
+
+
+	private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
+	{
+		mCamera.GetComponent<SmoothCameraScript>().enabled = false;
+		//-------------Movimentação Inicial-----------------------------
+		float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
+		float t = 0;
+		while (t <= 1.0f)
+		{
+			pcs.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
+			t += step;
+			pcs.transform.position = Vector2.Lerp(a, b, t);
+			yield return new WaitForFixedUpdate();
+		}
+
+		//-----------Character TP------------------------------
+		mCamera.transform.position = initialCamPos;
+		pcs.gameObject.transform.position = keyPlayerPos;
+
+		//wrdCont.gameObject.GetComponent<AudioSource>().volume = 0.038f;
+		wrdCont.gameObject.GetComponent<AudioSource>().enabled = false;
+
+		//-------------Movimentação do meio-----------------------------
+		step = (speed / (keyPlayerPos - c).magnitude) * Time.fixedDeltaTime;
+		t = 0;
+		while (t <= 1.0f)
+		{
+			pcs.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
+			t += step;
+			pcs.transform.position = Vector2.Lerp(keyPlayerPos, c, t);
+			yield return new WaitForFixedUpdate();
+		}
+
+		StartCoroutine(MoveCamera(mCamera.transform.position, finalPosCamera, 3f));
+		StartCoroutine(ChangeAlpha(title.GetComponent<SpriteRenderer>().color, Color.white, 3f));
+
+
+	}
+
+	private IEnumerator MoveCamera(Vector3 a, Vector3 b, float speed)
     {
         float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
         float t = 0;
@@ -84,12 +129,12 @@ public class CutsceneTutorial : MonoBehaviour {
 		isRuning = false;
         mCamera.GetComponent<SmoothCameraScript>().enabled = false;
 
-		if (!isRuning && !doneOnce)
+		/*if (!isRuning && !doneOnce)
         {
             doneOnce = true;
             StartCoroutine(MoveCamera(mCamera.transform.position, finalPosCamera, 3f));
             StartCoroutine(ChangeAlpha(title.GetComponent<SpriteRenderer>().color, Color.white, 3f));
-        }
+        }*/
 
     }
 
@@ -116,7 +161,7 @@ public class CutsceneTutorial : MonoBehaviour {
         mCamera.GetComponent<SmoothCameraScript>().enabled = false;
 		//pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
 		//StartCoroutine(MoveCharacter(finalPos, finalPos2, pb.maxVel)); 
-		StartCoroutine(MoveCharacter(finalPos, finalPos2, pcs.maxVelocity));
+		StartCoroutine(MoveCharacter(finalPos2, finalPos3, pcs.maxVelocity));
 	}
 
     private void Update()
