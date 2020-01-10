@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class CutsceneNivel1 : MonoBehaviour
 {
-   // public PlayerBehavior pb;
 	public PlayerControllingScript pc;
     public Camera mCamera;
     public Vector3 outOfLevelPlayerPos, cutScenePlayerPos, finalCamera;
 	public AudioSource level1;
-    public GameObject /*fazenda, fazendaViva, fazendeiro, fazendeiroFeliz,*/ finalLevelGo, eventSystem, particle;
+    public GameObject finalLevelGo, eventSystem, particle;
 	public GameObject[] floresMortas, floresVivas, flashes;
     public Canvas canvas;
     public GameObject rightArrow;
@@ -24,31 +23,14 @@ public class CutsceneNivel1 : MonoBehaviour
     {
         if (collision.CompareTag("Player") && !firstTouch)
         {
-			//canvas.enabled = false;
 			firstTouch = true;
 			Destroy(rightArrow);
-			//level1.Stop();
-			//level1.volume = (level1.volume / 2);
-			//cutSong.Play();
+
 			eventSystem.SetActive(false);
 			StartCoroutine(Cutscene(pc.transform.position, cutScenePlayerPos, finalCamera,
 				new Vector3(finalLevelGo.transform.position.x, pc.transform.position.y, pc.transform.position.z), pc.maxVelocity));
 
-			canvas.enabled = false;//eventSystem.SetActive(true);
-
-
-
-			/*//canvas.enabled = false;
-            Destroy(rightArrow);
-			//level1.Stop();
-			level1.volume = (level1.volume / 2);
-			//cutSong.Play();
-			eventSystem.SetActive(false);
-            StartCoroutine(Cutscene(pb.transform.position, cutScenePlayerPos,finalCamera,
-                new Vector3(finalLevelGo.transform.position.x, pb.transform.position.y, pb.transform.position.z), pb.maxVel));
-            
-            canvas.enabled = false;//eventSystem.SetActive(true);*/
-
+			canvas.enabled = false;
 		}
     }
 
@@ -79,7 +61,6 @@ public class CutsceneNivel1 : MonoBehaviour
         float t = 0;
         while (t <= 1.0f)
         {
-            //Debug.Log("pos = " + pb.transform.position + "; cutScenePlayerPos = " + cutScenePlayerPos);
             pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             t += step;
             pc.transform.position = Vector2.Lerp(a, outOfLevelPlayerPos, t);
@@ -96,7 +77,6 @@ public class CutsceneNivel1 : MonoBehaviour
 		t = 0;
 		while (t <= 1.0f)
 		{
-			//Debug.Log("pos = " + pb.transform.position + "; cutScenePlayerPos = " + cutScenePlayerPos);
 			pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
 			t += step;
 			pc.transform.position = Vector2.Lerp(keyPositionPlayer, cutScenePlayerPos, t);
@@ -106,22 +86,7 @@ public class CutsceneNivel1 : MonoBehaviour
 		pc.gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
 		yield return new WaitForSeconds(2.5f);
-
-		//pb.set_playerState(PlayerBehavior.States.Parado);
-		//Debug.Log("Sai");
-		//------------------Movimentação Camera---------------------------------------------------------
-		/*mCamera.GetComponent<SmoothCameraScript>().enabled = false;
-        //pb.GetComponent<ParticleSystem>().maxParticles--;
-        Vector3 startCamera = mCamera.transform.position;
-        step = (3f / (startCamera - finalCamera).magnitude) * Time.fixedDeltaTime;
-        t = 0;
-        while (t <= 1.0f)
-        {
-            t += step;
-            mCamera.transform.position = Vector3.Lerp(startCamera, finalCamera, t);
-            yield return new WaitForFixedUpdate();
-        }
-        yield return new WaitForSeconds(4.5f);*/
+		
 		//------------------Troca Sprites Fanzeda e Fazendeiro -------------------------------------
 		particle.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
@@ -139,22 +104,15 @@ public class CutsceneNivel1 : MonoBehaviour
 			StartCoroutine(ChangeAlpha(floresMortas[i], floresMortas[i].GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
 			StartCoroutine(ChangeAlpha(floresVivas[i], floresVivas[i].GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 1), 2f));
 		}
-		//StartCoroutine(ChangeAlpha(fazenda, fazenda.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
-        //yield return new WaitForSeconds(2f);
-        //StartCoroutine(ChangeAlpha(fazendaViva, fazendaViva.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 1), 2f));
         yield return new WaitForSeconds(6f);
-        //StartCoroutine(ChangeAlpha(fazendeiro, fazendeiro.GetComponent<SpriteRenderer>().color, Color.clear, 2f));
-        //StartCoroutine(ChangeAlpha(fazendeiroFeliz, fazendeiroFeliz.GetComponent<SpriteRenderer>().color, Color.white, 2f));
-        //yield return new WaitForSeconds(3f);
+
         //---------------------Movimentação final--------------------------------------------------------
         step = (speed / (cutScenePlayerPos - finalLevel).magnitude) * Time.fixedDeltaTime;
-
-        //Debug.Log("Aqui");
+		
         t = 0;
         while (t <= 1.0f)
         {
             pc.GetComponent<Rigidbody2D>().velocity = new Vector2(pc.maxVelocity, 0f);
-            //pb.set_playerState(PlayerBehavior.States.Andando);
             t += step;
             pc.transform.position = Vector2.Lerp(cutScenePlayerPos, finalLevel, t);
             yield return new WaitForFixedUpdate();
@@ -164,7 +122,7 @@ public class CutsceneNivel1 : MonoBehaviour
 
     private void Update()
     {
-        if (wrdCont.worldIsReal() && Mathf.Abs(pc.GetComponent<Rigidbody2D>().velocity.y) < 0.5f)//pb.get_playerState() == PlayerBehavior.States.Andando)
+        if (wrdCont.worldIsReal() && Mathf.Abs(pc.GetComponent<Rigidbody2D>().velocity.y) < 0.5f)
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         else
             gameObject.GetComponent<BoxCollider2D>().isTrigger = false;

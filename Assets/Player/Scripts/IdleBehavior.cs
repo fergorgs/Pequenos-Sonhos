@@ -38,6 +38,9 @@ public class IdleBehavior : MonoBehaviour {
 
     public bool isReal = false;
 
+	private bool isCutScene = false;
+	public void SetIsCutScene(bool val) { isCutScene = val; }
+
 	// Use this for initialization
 	void Start () {
 
@@ -56,18 +59,23 @@ public class IdleBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
-		if (!Player.GetComponent<SpriteRenderer>().flipX)
+		if (!isCutScene)
 		{
-			Debug.Log("Not fliped");
-			anchorPoint = Player.transform.position + new Vector3(-1, 2, 0);
-			GetComponent<SpriteRenderer>().flipX = false;
+			if (!Player.GetComponent<SpriteRenderer>().flipX)
+			{
+				anchorPoint = Player.transform.position + new Vector3(-1, 2, 0);
+				GetComponent<SpriteRenderer>().flipX = false;
+			}
+			else
+			{
+				anchorPoint = Player.transform.position + new Vector3(1, 2, 0);
+				GetComponent<SpriteRenderer>().flipX = true;
+			}
 		}
 		else
 		{
-			Debug.Log("Fliped");
-			anchorPoint = Player.transform.position + new Vector3(1, 2, 0);
-			GetComponent<SpriteRenderer>().flipX = true;
+			anchorPoint = Player.transform.position + new Vector3(-1, 2, 0);
+			GetComponent<SpriteRenderer>().flipX = false;
 		}
 
 		if (Mathf.Abs(Player.GetComponent<Rigidbody2D>().velocity.x) < 0.3f)

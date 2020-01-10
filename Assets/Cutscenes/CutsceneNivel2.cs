@@ -6,22 +6,30 @@ public class CutsceneNivel2 : MonoBehaviour {
 
     public PlayerBehavior pb;
 	public PlayerControllingScript pc;
-    public GameObject flash, particula, passaroMorto, passaroReal, passaroDefault;
-    public Vector3 finalPos, finalPos2, finalPosCam;
+    public GameObject flash, particula, passaroMorto, passaroReal, passaroDefault, balao;
+    public Vector3 outOfLevelPos, keyCutscenePos, cutscenePos, outOfCutscenePos, firstCamPos, finalPosCam;
 
     public WorldSwitchScript wrdCont;
 
     public GameObject[] uiButtons;
     public Camera cam;
 
+	public AudioSource levelMusic;
+
+	private bool firstTouch = false;
+
+	public Sprite lookingUpInverted;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !firstTouch)
         {
-            for (int i = 0; i < uiButtons.Length; i++)
+			firstTouch = true;
+
+			for (int i = 0; i < uiButtons.Length; i++)
                 Destroy(uiButtons[i]);
 
-            StartCoroutine(Cutscene(pc.transform.position, finalPos, finalPos2, pc.maxVelocity));
+            StartCoroutine(Cutscene(pc.transform.position, cutscenePos, outOfCutscenePos, pc.maxVelocity));
         }
     }
 
@@ -56,20 +64,38 @@ public class CutsceneNivel2 : MonoBehaviour {
 
     private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
     {
-        //-------------Movimentação Inicial-----------------------------
-        
-        float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
+		cam.GetComponent<SmoothCameraScript>().enabled = false;
+
+		//-------------Movimentação Out of Level-----------------------------
+
+		float step = (speed / (a - outOfLevelPos).magnitude) * Time.fixedDeltaTime;
         Debug.Log("speed = " + speed + " / step = " + step);
         float t = 0;
         while (t <= 1.0f)
         {
             pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             t += step;
-            pc.transform.position = Vector2.Lerp(a, b, t);
+            pc.transform.position = Vector2.Lerp(a, outOfLevelPos, t);
             yield return new WaitForFixedUpdate();
         }
-        cam.GetComponent<SmoothCameraScript>().enabled = false;
-        StartCoroutine(MoveCamera(cam.transform.position, finalPosCam, 2f));
+
+		pc.gameObject.transform.position = keyCutscenePos;
+		cam.transform.position = firstCamPos;
+		//levelMusic.Pause();
+		wrdCont.BgMusic.enabled = false;
+
+		//-------------Movimentação Out of Level-----------------------------
+
+		step = (speed / (keyCutscenePos - cutscenePos).magnitude) * Time.fixedDeltaTime;
+		Debug.Log("speed = " + speed + " / step = " + step);
+		t = 0;
+		while (t <= 1.0f)
+		{
+			pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
+			t += step;
+			pc.transform.position = Vector2.Lerp(keyCutscenePos, cutscenePos, t);
+			yield return new WaitForFixedUpdate();
+		}
 
 		yield return new WaitForSeconds(2f);
 		//---------------------------------------------------------------
@@ -84,28 +110,55 @@ public class CutsceneNivel2 : MonoBehaviour {
         flash.SetActive(true);
         yield return new WaitForSeconds(1f);
 
+		//passaro real voando-------------------------------------------------------
         Destroy(passaroMorto);
         passaroReal.SetActive(true);
-        yield return new WaitForSeconds(9.8f);
-        passaroDefault.SetActive(true);
-        passaroDefault.transform.position = passaroReal.transform.position;
-        passaroDefault.GetComponent<IdleBehavior>().idleSpeed = 2f;
+		yield return new WaitForSeconds(5f);
+		pc.GetComponent<Animator>().Play("Looking_Up");
+		yield return new WaitForSeconds(4.5f);
+		pc.GetComponent<SpriteRenderer>().flipX = true;
+		yield return new WaitForSeconds(2f);
+		pc.GetComponent<Animator>().Play("Idle_Animation");
 
-        yield return new WaitForSeconds(4f);
+		yield return new WaitForSeconds(1f);
 
-        passaroDefault.GetComponent<IdleBehavior>().idleSpeed = 0.3f;
+		//camera wideshot---------------------------------------------------------
+		StartCoroutine(MoveCamera(cam.transform.position, finalPosCam, 1f));
+		yield return new WaitForSeconds(1f);
 
-        //---------------------------------------------------------------------
-        //-------------Movimentação Final-----------------------------------------------
-        //pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
-        speed = 1f;
-        float step2 = (speed / (b - c).magnitude) * Time.fixedDeltaTime;
+		//pop up balao-------------------------------------------------------------
+		balao.SetActive(true);
+		yield return new WaitForSeconds(3.5f);
+		passaroDefault.SetActive(true);
+		StartCoroutine(ChangeAlpha(passaroDefault, new Color(1, 1, 1, 0), Color.white, 2));
+		yield return new WaitForSeconds(3f);
+
+		//pop out----------------------------------------------------------------
+		balao.GetComponent<Animator>().Play("PopOut");
+		passaroDefault.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+		pc.GetComponent<Animator>().Play("Looking_Up");
+		yield return new WaitForSeconds(1f);
+		passaroDefault.GetComponent<IdleBehavior>().enabled = true;
+		passaroDefault.GetComponent<IdleBehavior>().SetIsCutScene(true);
+		passaroDefault.GetComponent<IdleBehavior>().idleSpeed = 2f;
+        yield return new WaitForSeconds(3f);
+		pc.GetComponent<Animator>().Play("Idle_Animation");
+		yield return new WaitForSeconds(1f);
+		passaroDefault.GetComponent<IdleBehavior>().idleSpeed = 0.3f;
+		yield return new WaitForSeconds(1f);
+		pc.GetComponent<SpriteRenderer>().flipX = false;
+
+		//---------------------------------------------------------------------
+		//-------------Movimentação Final-----------------------------------------------
+		//pb.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
+		speed = 1f;
+        float step2 = (speed / (cutscenePos - outOfCutscenePos).magnitude) * Time.fixedDeltaTime;
         float d = 0;
         while (d <= 1.0f)
         {
             pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             d += step;
-            pc.transform.position = Vector2.Lerp(b, c, d);
+            pc.transform.position = Vector2.Lerp(cutscenePos, outOfCutscenePos, d);
             yield return new WaitForFixedUpdate();
         }
 
