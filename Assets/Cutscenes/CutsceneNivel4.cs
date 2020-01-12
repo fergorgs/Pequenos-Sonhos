@@ -10,8 +10,7 @@ public class CutsceneNivel4 : MonoBehaviour {
     public PlayerBehavior pb;
 	public PlayerControllingScript pc;
     public GameObject estatua, particula, particula2, particula3, bird, birdPuppet;
-    public Vector3 finalPos;
-    public Vector3 finalPos2;
+	public Vector3 outOfLevelPos, keyCutscenePos, cutscenePos, outOfCutscenePos, finalCamPos;
     public GameObject[] moveButtons;
     public GameObject SwitchButton;
     public GameObject pickupCanvas;
@@ -26,6 +25,10 @@ public class CutsceneNivel4 : MonoBehaviour {
     //public GameObject[] uiButtons;
     public Camera cam;
 
+	public AudioSource throwSound, landingSound;
+
+	private bool firstTouch = false;
+
     private void Start()
     {
         ctSh = birdPuppet.GetComponent<CutsceneShift>();
@@ -34,13 +37,15 @@ public class CutsceneNivel4 : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !firstTouch)
         {
-            for (int i = 0; i < moveButtons.Length; i++)
+			firstTouch = true;
+
+			for (int i = 0; i < moveButtons.Length; i++)
                 moveButtons[i].GetComponent<Image>().raycastTarget = false;
             SwitchButton.GetComponent<Image>().raycastTarget = false;
 
-            StartCoroutine(Cutscene(pc.transform.position, finalPos, pc.maxVelocity));
+            StartCoroutine(Cutscene(pc.transform.position, cutscenePos, pc.maxVelocity));
         }
     }
 
@@ -62,8 +67,9 @@ public class CutsceneNivel4 : MonoBehaviour {
 
     private IEnumerator Cutscene(Vector3 a, Vector3 b, float speed)
     {
-        //-------------Movimentação Inicial-----------------------------
-        float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
+		cam.GetComponent<SmoothCameraScript>().enabled = false;
+        //-------------out of level-----------------------------
+        float step = (speed / (a - outOfLevelPos).magnitude) * Time.fixedDeltaTime;
         float t = 0;
         while (t <= 1.0f)
         {
@@ -73,8 +79,23 @@ public class CutsceneNivel4 : MonoBehaviour {
             yield return new WaitForFixedUpdate();
         }
 
+		pc.transform.position = keyCutscenePos;
+		cam.transform.position = finalCamPos;
+
 		wrdCont.BgMusic.enabled = false;
 		wrdCont.DreamMusic.enabled = false;
+
+		//--------------------into cutscene--------------------------
+		step = (speed / (keyCutscenePos - cutscenePos).magnitude) * Time.fixedDeltaTime;
+		t = 0;
+		while (t <= 1.0f)
+		{
+			pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
+			t += step;
+			pc.transform.position = Vector2.Lerp(keyCutscenePos, cutscenePos, t);
+			yield return new WaitForFixedUpdate();
+		}
+
 		SwitchButton.GetComponent<Image>().raycastTarget = true;
 		//---------------------------------------------------------------
 		//--------Troca sprites-------------------------------------------
@@ -82,6 +103,7 @@ public class CutsceneNivel4 : MonoBehaviour {
 		//THROW 1
 		particula.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
+		throwSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();
@@ -92,6 +114,7 @@ public class CutsceneNivel4 : MonoBehaviour {
 		//THROW 2
 		particula2.SetActive(true);
 		pc.GetComponent<Animator>().Play("Player_Throw");
+		throwSound.Play();
 		pc.GetComponent<ParticleSystem>().maxParticles--;
 		pc.GetComponent<ParticleSystem>().Clear();
 		pc.GetComponent<ParticleSystem>().Play();
@@ -109,9 +132,14 @@ public class CutsceneNivel4 : MonoBehaviour {
         Destroy(particula3);*/
 
 		//Triste
+		yield return new WaitForSeconds(2f);
+		pc.GetComponent<Animator>().Play("Looking_Up");
 		yield return new WaitForSeconds(3f);
-        pc.GetComponent<SpriteRenderer>().flipX = true;
-        pc.GetComponent<Animator>().Play("Triste");
+		pc.GetComponent<Animator>().Play("Idle_Animation");
+		pc.GetComponent<SpriteRenderer>().flipX = true;
+		yield return new WaitForSeconds(3f);
+		pc.GetComponent<Animator>().Play("Triste");
+		landingSound.Play();
         //yield return new WaitForSeconds(1f);
 
         //Bird Movement
@@ -153,7 +181,8 @@ public class CutsceneNivel4 : MonoBehaviour {
         //Debug.Log("Ok");
         //pb.set_playerState(PlayerBehavior.States.Parado);
         pc.GetComponent<Animator>().Play("Idle_Animation");
-        yield return new WaitForSeconds(1f);
+		landingSound.Play();
+		yield return new WaitForSeconds(1f);
 		pc.GetComponent<SpriteRenderer>().flipX = false;
 		yield return new WaitForSeconds(3f);
 		//pb.set_playerState(PlayerBehavior.States.Andando);
@@ -180,7 +209,7 @@ public class CutsceneNivel4 : MonoBehaviour {
 			gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
 		if (ctSh.GetIsReal() && wrdCont.worldIsReal() && !cutS2started)
         {
-            StartCoroutine(Cutscene2(pc.transform.position, finalPos2, pc.maxVelocity));
+            StartCoroutine(Cutscene2(pc.transform.position, outOfCutscenePos, pc.maxVelocity));
             cutS2started = true;
         }
     }
