@@ -14,11 +14,9 @@ public class CutsceneNivel2 : MonoBehaviour {
     public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource levelMusic;
+	public AudioSource throwSound;
 
 	private bool firstTouch = false;
-
-	public Sprite lookingUpInverted;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -81,10 +79,9 @@ public class CutsceneNivel2 : MonoBehaviour {
 
 		pc.gameObject.transform.position = keyCutscenePos;
 		cam.transform.position = firstCamPos;
-		//levelMusic.Pause();
 		wrdCont.BgMusic.enabled = false;
 
-		//-------------Movimentação Out of Level-----------------------------
+		//-------------Movimentação Into Cutscene-----------------------------
 
 		step = (speed / (keyCutscenePos - cutscenePos).magnitude) * Time.fixedDeltaTime;
 		Debug.Log("speed = " + speed + " / step = " + step);
@@ -102,6 +99,7 @@ public class CutsceneNivel2 : MonoBehaviour {
 		//--------Throw-------------------------------------------
 		particula.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
+		throwSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();

@@ -6,23 +6,28 @@ public class CutsceneNivel3 : MonoBehaviour {
 
     public PlayerBehavior pb;
 	public PlayerControllingScript pc;
-    public GameObject enemy, happyEnemy, particula, particula2;
-    public Vector3 finalPos;
-    public Vector3 finalPos2;
+    public GameObject enemy, happyEnemy, particula, particula2, flash, fazendeiroT, fazendeiroF;
+    public Vector3 outOfLevelPos, keyCutscenePos, finalCutscenePos, outOfCutscenePos, cutsceneCamPos;
 
     public WorldSwitchScript wrdCont;
 
     public GameObject[] uiButtons;
     public Camera cam;
 
+	public AudioSource throwSound;
+
+	private bool firstTouch = false;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !firstTouch)
         {
+			firstTouch = true;
+
             for (int i = 0; i < uiButtons.Length; i++)
                 Destroy(uiButtons[i]);
 
-            StartCoroutine(Cutscene(pc.transform.position, finalPos, finalPos2, pc.maxVelocity));
+            StartCoroutine(Cutscene(pc.transform.position, outOfLevelPos, outOfCutscenePos, pc.maxVelocity));
         }
     }
 
@@ -44,47 +49,89 @@ public class CutsceneNivel3 : MonoBehaviour {
 
     private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
     {
-        //-------------Movimentação Inicial-----------------------------
-        float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
+		cam.GetComponent<SmoothCameraScript>().enabled = false;
+
+        //-------------sai do nivel-----------------------------
+        float step = (speed / (a - outOfLevelPos).magnitude) * Time.fixedDeltaTime;
         float t = 0;
         while (t <= 1.0f)
         {
             pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             t += step;
-            pc.transform.position = Vector2.Lerp(a, b, t);
+            pc.transform.position = Vector2.Lerp(a, outOfLevelPos, t);
             yield return new WaitForFixedUpdate();
         }
+
+		pc.transform.position = keyCutscenePos;
+		cam.transform.position = cutsceneCamPos;
+		wrdCont.BgMusic.enabled = false;
+		pc.passos.enabled = false;
+
+		//-------------entra em cena----------------------------
+		step = (speed / (keyCutscenePos - finalCutscenePos).magnitude) * Time.fixedDeltaTime;
+		t = 0;
+		while (t <= 1.0f)
+		{
+			pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
+			t += step;
+			pc.transform.position = Vector2.Lerp(keyCutscenePos, finalCutscenePos, t);
+			yield return new WaitForFixedUpdate();
+		}
+
 		//---------------------------------------------------------------
-		//--------Troca sprites-------------------------------------------
+		//--------Olha pra cima-------------------------------------------
 		yield return new WaitForSeconds(1f);
+		pc.GetComponent<Animator>().Play("Looking_Up");
+		yield return new WaitForSeconds(2f);
+		pc.GetComponent<Animator>().Play("Idle_Animation");
+		yield return new WaitForSeconds(2f);
+
+		//---------------------------------------------------------------
+		//--------joga pickup--------------------------------------------
 		particula.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
+		throwSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(6f);
         Destroy(particula);
         particula2.SetActive(true);
 		pc.GetComponent<Animator>().Play("Player_Throw");
+		throwSound.Play();
 		pc.GetComponent<ParticleSystem>().maxParticles--;
 		pc.GetComponent<ParticleSystem>().Clear();
 		pc.GetComponent<ParticleSystem>().Play();
 		yield return new WaitForSeconds(3f);
-        Destroy(particula2);
-        StartCoroutine(ChangeAlpha(enemy, enemy.GetComponent<SpriteRenderer>().color, Color.clear, 2f));
+
+		//---------------------------------------------------------------
+		//--------muda sprite inimigo------------------------------------
+		Destroy(particula2);
+        StartCoroutine(ChangeAlpha(enemy, enemy.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
         StartCoroutine(ChangeAlpha(happyEnemy, happyEnemy.GetComponent<SpriteRenderer>().color, Color.white, 2f));
+		flash.SetActive(true);
         yield return new WaitForSeconds(4f);
-        //---------------------------------------------------------------------
-        //-------------Movimentação Final-----------------------------------------------
-        cam.GetComponent<SmoothCameraScript>().enabled = false;
+		//Destroy(enemy);
+
+		//---------------------------------------------------------------
+		//--------muda sprite fazendeiro---------------------------------
+
+		StartCoroutine(ChangeAlpha(fazendeiroT, fazendeiroT.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
+		StartCoroutine(ChangeAlpha(fazendeiroF, fazendeiroF.GetComponent<SpriteRenderer>().color, Color.white, 2f));
+
+		yield return new WaitForSeconds(3f);
+
+		//---------------------------------------------------------------------
+		//-------------Movimentação Final-----------------------------------------------
+		cam.GetComponent<SmoothCameraScript>().enabled = false;
         //pc.GetComponent<PlayerBehavior>().set_playerState(PlayerBehavior.States.Andando);
-        float step2 = (speed / (b - c).magnitude) * Time.fixedDeltaTime;
+        float step2 = (speed / (finalCutscenePos - outOfCutscenePos).magnitude) * Time.fixedDeltaTime;
         float d = 0;
         while (d <= 1.0f)
         {
             pc.GetComponent<Rigidbody2D>().velocity = new Vector2(speed, 0f);
             d += step;
-            pc.transform.position = Vector2.Lerp(b, c, d);
+            pc.transform.position = Vector2.Lerp(finalCutscenePos, outOfCutscenePos, d);
             yield return new WaitForFixedUpdate();
         }
 
@@ -96,5 +143,11 @@ public class CutsceneNivel3 : MonoBehaviour {
 			gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
 		else
 			gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+
+		if(enemy != null)
+		{
+			if (enemy.GetComponent<SpriteRenderer>().color == new Color(1, 1, 1, 0))
+				Destroy(enemy);
+		}
 	}
 }
