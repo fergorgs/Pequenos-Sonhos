@@ -14,7 +14,7 @@ public class CutsceneNivel3 : MonoBehaviour {
     public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource throwSound;
+	public AudioSource throwSound, glowSound, flashSound, manSound;
 
 	private bool firstTouch = false;
 
@@ -47,7 +47,23 @@ public class CutsceneNivel3 : MonoBehaviour {
         yield return new WaitForSeconds(2f);
     }
 
-    private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
+	IEnumerator ChangeVolume(AudioSource audSorce, float startVol, float endVol, float duration)
+	{
+		for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+		{
+			yield return null;
+		}
+		for (float t = 0f; t < duration; t += Time.deltaTime)
+		{
+			float normalizedTime = t / duration;
+			audSorce.volume = Mathf.Lerp(startVol, endVol, normalizedTime);
+			//go.GetComponent<SpriteRenderer>().color = Color.Lerp(start, end, normalizedTime);
+			yield return null;
+		}
+		audSorce.volume = endVol;
+	}
+
+	private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
     {
 		cam.GetComponent<SmoothCameraScript>().enabled = false;
 
@@ -91,14 +107,19 @@ public class CutsceneNivel3 : MonoBehaviour {
 		particula.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
+		glowSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(6f);
         Destroy(particula);
-        particula2.SetActive(true);
+		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
+		yield return new WaitForSeconds(3f);
+		particula2.SetActive(true);
 		pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
+		glowSound.volume = 0.5f;
+		glowSound.Play();
 		pc.GetComponent<ParticleSystem>().maxParticles--;
 		pc.GetComponent<ParticleSystem>().Clear();
 		pc.GetComponent<ParticleSystem>().Play();
@@ -107,9 +128,11 @@ public class CutsceneNivel3 : MonoBehaviour {
 		//---------------------------------------------------------------
 		//--------muda sprite inimigo------------------------------------
 		Destroy(particula2);
-        StartCoroutine(ChangeAlpha(enemy, enemy.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
+		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
+		StartCoroutine(ChangeAlpha(enemy, enemy.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
         StartCoroutine(ChangeAlpha(happyEnemy, happyEnemy.GetComponent<SpriteRenderer>().color, Color.white, 2f));
 		flash.SetActive(true);
+		flashSound.Play();
         yield return new WaitForSeconds(4f);
 		//Destroy(enemy);
 
@@ -119,7 +142,10 @@ public class CutsceneNivel3 : MonoBehaviour {
 		StartCoroutine(ChangeAlpha(fazendeiroT, fazendeiroT.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 2f));
 		StartCoroutine(ChangeAlpha(fazendeiroF, fazendeiroF.GetComponent<SpriteRenderer>().color, Color.white, 2f));
 
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(1f);
+
+		manSound.Play();
+		yield return new WaitForSeconds(2f);
 
 		//---------------------------------------------------------------------
 		//-------------Movimentação Final-----------------------------------------------

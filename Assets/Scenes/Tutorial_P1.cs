@@ -131,16 +131,18 @@ public class Tutorial_P1 : MonoBehaviour
 		Caixa.GetComponent<ShiftBehavior>().isShiftable = true;
 		BW5.SetActive(true);
 
+		SwicthButton.GetComponent<Image>().raycastTarget = false;
+
 		//TEST1.GetComponent<Image>().color = new Color(109, 109, 109, 1);
 
 		//for (int i = 0; i < UiElements.Length; i++)
 		//	UiElements[i].GetComponent<Image>().color = new Color(109, 109, 109, 1);
 
 		while (!Caixa.GetComponent<ShiftBehavior>().GetIsReal())
-		//while (!clickedOn)
 			yield return null;
 
 		Time.timeScale = 1;
+		SwicthButton.GetComponent<Image>().raycastTarget = true;
 
 		Text5.SetActive(false);
 		Mao2.SetActive(false);

@@ -25,7 +25,7 @@ public class CutsceneNivel4 : MonoBehaviour {
     //public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource throwSound, landingSound;
+	public AudioSource throwSound, landingSound, glowSound, flashSound, weepSound;
 
 	private bool firstTouch = false;
 
@@ -65,7 +65,23 @@ public class CutsceneNivel4 : MonoBehaviour {
         yield return new WaitForSeconds(2f);
     }
 
-    private IEnumerator Cutscene(Vector3 a, Vector3 b, float speed)
+	IEnumerator ChangeVolume(AudioSource audSorce, float startVol, float endVol, float duration)
+	{
+		for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+		{
+			yield return null;
+		}
+		for (float t = 0f; t < duration; t += Time.deltaTime)
+		{
+			float normalizedTime = t / duration;
+			audSorce.volume = Mathf.Lerp(startVol, endVol, normalizedTime);
+			//go.GetComponent<SpriteRenderer>().color = Color.Lerp(start, end, normalizedTime);
+			yield return null;
+		}
+		audSorce.volume = endVol;
+	}
+
+	private IEnumerator Cutscene(Vector3 a, Vector3 b, float speed)
     {
 		cam.GetComponent<SmoothCameraScript>().enabled = false;
         //-------------out of level-----------------------------
@@ -104,22 +120,27 @@ public class CutsceneNivel4 : MonoBehaviour {
 		particula.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
+		glowSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(3f);
         Destroy(particula);
+		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
 		yield return new WaitForSeconds(3f);
 
 		//THROW 2
 		particula2.SetActive(true);
 		pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
+		glowSound.volume = 0.5f;
+		glowSound.Play();
 		pc.GetComponent<ParticleSystem>().maxParticles--;
 		pc.GetComponent<ParticleSystem>().Clear();
 		pc.GetComponent<ParticleSystem>().Play();
 		yield return new WaitForSeconds(3f);
         Destroy(particula2);
+		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
 		yield return new WaitForSeconds(3f);
 
 		//THROW 3
@@ -167,6 +188,7 @@ public class CutsceneNivel4 : MonoBehaviour {
         }
         yield return new WaitForSeconds(6.5f);
         flash.SetActive(true);
+		flashSound.Play();
         yield return new WaitForSeconds(0.5f);
         birdPuppet.SetActive(false);
         bird.transform.position = estatua.transform.position;

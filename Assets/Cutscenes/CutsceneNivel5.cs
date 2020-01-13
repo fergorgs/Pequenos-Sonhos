@@ -90,8 +90,24 @@ public class CutsceneNivel5 : MonoBehaviour {
         go.GetComponent<SpriteRenderer>().color = end;
     }
 
+	IEnumerator ChangeVolume(AudioSource audSorce, float startVol, float endVol, float duration)
+	{
+		for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+		{
+			yield return null;
+		}
+		for (float t = 0f; t < duration; t += Time.deltaTime)
+		{
+			float normalizedTime = t / duration;
+			audSorce.volume = Mathf.Lerp(startVol, endVol, normalizedTime);
+			//go.GetComponent<SpriteRenderer>().color = Color.Lerp(start, end, normalizedTime);
+			yield return null;
+		}
+		audSorce.volume = endVol;
+	}
 
-    private IEnumerator SendSmoke()
+
+	private IEnumerator SendSmoke()
     {
         while (true)
         {
@@ -105,6 +121,8 @@ public class CutsceneNivel5 : MonoBehaviour {
 
     private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
     {
+		StartCoroutine(ChangeVolume(wrdCont.BgMusic, wrdCont.BgMusic.volume, wrdCont.BgMusic.volume * 0.4f, 3f));
+
         //-------------Movimentação Inicial-----------------------------
         float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
         float t = 0;

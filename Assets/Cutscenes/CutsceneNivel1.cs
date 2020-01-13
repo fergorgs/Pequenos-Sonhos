@@ -15,7 +15,7 @@ public class CutsceneNivel1 : MonoBehaviour
     public WorldSwitchScript wrdCont;
 
 	public Vector3 keyPositionPlayer;
-	public AudioSource throwSound;
+	public AudioSource throwSound, glowSound, flashSound;
 
 	private bool firstTouch = false;
 
@@ -52,7 +52,25 @@ public class CutsceneNivel1 : MonoBehaviour
         yield return new WaitForSeconds(2f);
     }
 
-    private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 finalCamera, Vector3 finalLevel, float speed)
+	IEnumerator ChangeVolume(AudioSource audSorce, float startVol, float endVol, float duration)
+	{
+		for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+		{
+			yield return null;
+		}
+		for (float t = 0f; t < duration; t += Time.deltaTime)
+		{
+			float normalizedTime = t / duration;
+			audSorce.volume = Mathf.Lerp(startVol, endVol, normalizedTime);
+			//go.GetComponent<SpriteRenderer>().color = Color.Lerp(start, end, normalizedTime);
+			yield return null;
+		}
+		audSorce.volume = endVol;
+		//go.GetComponent<SpriteRenderer>().color = end;
+		//yield return new WaitForSeconds(2f);
+	}
+
+	private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 finalCamera, Vector3 finalLevel, float speed)
     {
 		mCamera.GetComponent<SmoothCameraScript>().enabled = false;
 
@@ -91,13 +109,16 @@ public class CutsceneNivel1 : MonoBehaviour
 		particle.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
+		glowSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(2f);
+		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
         particle.SetActive(false);
 		for (int i = 0; i < 3; i++)
 			flashes[i].SetActive(true);
+		flashSound.Play();
 		yield return new WaitForSeconds(2.5f);
 		for(int i = 0; i < 3; i++)
 		{

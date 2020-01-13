@@ -14,7 +14,7 @@ public class CutsceneNivel2 : MonoBehaviour {
     public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource throwSound;
+	public AudioSource throwSound, glowSound, flashSound;
 
 	private bool firstTouch = false;
 
@@ -60,7 +60,23 @@ public class CutsceneNivel2 : MonoBehaviour {
         yield return new WaitForSeconds(2f);
     }
 
-    private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
+	IEnumerator ChangeVolume(AudioSource audSorce, float startVol, float endVol, float duration)
+	{
+		for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+		{
+			yield return null;
+		}
+		for (float t = 0f; t < duration; t += Time.deltaTime)
+		{
+			float normalizedTime = t / duration;
+			audSorce.volume = Mathf.Lerp(startVol, endVol, normalizedTime);
+			//go.GetComponent<SpriteRenderer>().color = Color.Lerp(start, end, normalizedTime);
+			yield return null;
+		}
+		audSorce.volume = endVol;
+	}
+
+	private IEnumerator Cutscene(Vector3 a, Vector3 b, Vector3 c, float speed)
     {
 		cam.GetComponent<SmoothCameraScript>().enabled = false;
 
@@ -100,12 +116,15 @@ public class CutsceneNivel2 : MonoBehaviour {
 		particula.SetActive(true);
         pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
+		glowSound.Play();
         pc.GetComponent<ParticleSystem>().maxParticles--;
         pc.GetComponent<ParticleSystem>().Clear();
         pc.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(3f);
+		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1));
         Destroy(particula);
         flash.SetActive(true);
+		flashSound.Play();
         yield return new WaitForSeconds(1f);
 
 		//passaro real voando-------------------------------------------------------
