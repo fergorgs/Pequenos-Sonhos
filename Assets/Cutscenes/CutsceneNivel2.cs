@@ -14,7 +14,7 @@ public class CutsceneNivel2 : MonoBehaviour {
     public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource throwSound, glowSound, flashSound;
+	public AudioSource throwSound, glowSound, flashSound, flapsLong, flapsShort;
 
 	private bool firstTouch = false;
 
@@ -130,11 +130,15 @@ public class CutsceneNivel2 : MonoBehaviour {
 		//passaro real voando-------------------------------------------------------
         Destroy(passaroMorto);
         passaroReal.SetActive(true);
+		flapsLong.Play();
 		yield return new WaitForSeconds(5f);
 		pc.GetComponent<Animator>().Play("Looking_Up");
 		yield return new WaitForSeconds(4.5f);
 		pc.GetComponent<SpriteRenderer>().flipX = true;
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(0.5f);
+		flapsLong.Pause();
+		//StartCoroutine(ChangeVolume(flapsLong, flapsLong.volume, 0, 0.5f));
+		yield return new WaitForSeconds(1.5f);
 		pc.GetComponent<Animator>().Play("Idle_Animation");
 
 		yield return new WaitForSeconds(1f);
@@ -154,11 +158,13 @@ public class CutsceneNivel2 : MonoBehaviour {
 		balao.GetComponent<Animator>().Play("PopOut");
 		passaroDefault.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
 		pc.GetComponent<Animator>().Play("Looking_Up");
+		flashSound.Play();
 		yield return new WaitForSeconds(1f);
 		passaroDefault.GetComponent<IdleBehavior>().enabled = true;
 		passaroDefault.GetComponent<IdleBehavior>().SetIsCutScene(true);
 		passaroDefault.GetComponent<IdleBehavior>().idleSpeed = 2f;
-        yield return new WaitForSeconds(3f);
+		//flapsShort.Play();
+		yield return new WaitForSeconds(3f);
 		pc.GetComponent<Animator>().Play("Idle_Animation");
 		yield return new WaitForSeconds(1f);
 		passaroDefault.GetComponent<IdleBehavior>().idleSpeed = 0.3f;

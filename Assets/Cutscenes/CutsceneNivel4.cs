@@ -25,7 +25,7 @@ public class CutsceneNivel4 : MonoBehaviour {
     //public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource throwSound, landingSound, glowSound, flashSound, weepSound;
+	public AudioSource throwSound, landingSound, glowSound, flashSound, weepSound, flapsSound, flapsSoundSmall, questionSound, happyMusic;
 
 	private bool firstTouch = false;
 
@@ -96,6 +96,7 @@ public class CutsceneNivel4 : MonoBehaviour {
         }
 
 		pc.transform.position = keyCutscenePos;
+		bird.transform.position = pc.transform.position;
 		cam.transform.position = finalCamPos;
 
 		wrdCont.BgMusic.enabled = false;
@@ -127,7 +128,7 @@ public class CutsceneNivel4 : MonoBehaviour {
         yield return new WaitForSeconds(3f);
         Destroy(particula);
 		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(3.5f);
 
 		//THROW 2
 		particula2.SetActive(true);
@@ -155,8 +156,11 @@ public class CutsceneNivel4 : MonoBehaviour {
 		//Triste
 		yield return new WaitForSeconds(2f);
 		pc.GetComponent<Animator>().Play("Looking_Up");
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(0.5f);
+		questionSound.Play();
+		yield return new WaitForSeconds(2.5f);
 		pc.GetComponent<Animator>().Play("Idle_Animation");
+		//bird.GetComponent<IdleBehavior>().SetIsCutScene(true);
 		pc.GetComponent<SpriteRenderer>().flipX = true;
 		yield return new WaitForSeconds(3f);
 		pc.GetComponent<Animator>().Play("Triste");
@@ -165,10 +169,11 @@ public class CutsceneNivel4 : MonoBehaviour {
 
         //Bird Movement
         birdPuppet.SetActive(true);
+		birdPuppet.transform.position = bird.transform.position;
         bird.SetActive(false);
         birdPuppet.GetComponent<SpriteRenderer>().flipX = true;
         birdPuppet.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(7f);
         birdPuppet.GetComponent<Animator>().Play("BirdTriste");
         birdPuppet.GetComponent<SpriteRenderer>().flipX = false;
 
@@ -178,6 +183,8 @@ public class CutsceneNivel4 : MonoBehaviour {
     {
         cam.GetComponent<SmoothCameraScript>().enabled = false;
         birdPuppet.GetComponent<Animator>().Play("Bird");
+		flapsSound.Play();
+		happyMusic.Play();
         foreach (ParticleFollowPath path in paths){
 
             if (path.pathName == "PathBird")
@@ -186,17 +193,22 @@ public class CutsceneNivel4 : MonoBehaviour {
                 path.enabled = true;
 
         }
-        yield return new WaitForSeconds(6.5f);
-        flash.SetActive(true);
+        yield return new WaitForSeconds(6f);
+		StartCoroutine(ChangeVolume(flapsSound, flapsSound.volume, 0, 0.5f));
+		yield return new WaitForSeconds(0.5f);
+		flash.SetActive(true);
 		flashSound.Play();
         yield return new WaitForSeconds(0.5f);
         birdPuppet.SetActive(false);
         bird.transform.position = estatua.transform.position;
         bird.SetActive(true);
 
-        bird.GetComponent<SpriteRenderer>().color = Color.white;
+		yield return new WaitForSeconds(0.5f);
+		flapsSoundSmall.Play();
+
+		bird.GetComponent<SpriteRenderer>().color = Color.white;
         StartCoroutine(ChangeAlpha(estatua, Color.white, new Color(1, 1, 1, 0), 3));
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3.5f);
         Destroy(flash);
 
         //-------------Movimentação Final-----------------------------
@@ -206,7 +218,7 @@ public class CutsceneNivel4 : MonoBehaviour {
 		landingSound.Play();
 		yield return new WaitForSeconds(1f);
 		pc.GetComponent<SpriteRenderer>().flipX = false;
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(4f);
 		//pb.set_playerState(PlayerBehavior.States.Andando);
 		pc.GetComponent<Animator>().Play("Player_Walk");
         float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;

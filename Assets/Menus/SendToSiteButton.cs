@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SendToSiteButton : MonoBehaviour {
 
-	public string siteURL = "https://www.kickante.com.br/campanhas/instituto-andre-franco-vive-arrecadacao";
+	private string siteURL = "http://gg.gg/linkToCampaign";
 
 	// Use this for initialization
 	void Start () {

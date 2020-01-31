@@ -32,7 +32,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -252,11 +252,11 @@ RectTransform:
   - {fileID: 224401279992049420}
   - {fileID: 224070146036786994}
   - {fileID: 224318291724848010}
-  - {fileID: 224980829192284588}
   - {fileID: 224758022240479768}
   - {fileID: 224556449317465026}
   - {fileID: 161255058}
   - {fileID: 224466583601432316}
+  - {fileID: 224980829192284588}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -511,7 +511,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -840,7 +840,7 @@ RectTransform:
   m_LocalScale: {x: 210.06001, y: 73.68, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1997,6 +1997,7 @@ GameObject:
   - component: {fileID: 224626441320576350}
   - component: {fileID: 222612855353776270}
   - component: {fileID: 114489267433822716}
+  - component: {fileID: 7274952047308271053}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -2063,6 +2064,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Carregando...
+--- !u!114 &7274952047308271053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366902743516158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0aa0fedbb87e448a44df16f8e884c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PortText: Carregando...
+  IngText: Loading...
+  TchecText: "Na\u010D\xEDt\xE1n\xED"
+  LangMan: {fileID: 0}
 --- !u!1 &1379043901997016
 GameObject:
   m_ObjectHideFlags: 0
@@ -2281,7 +2298,7 @@ RectTransform:
   - {fileID: 224643859191873436}
   - {fileID: 224423506377492010}
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2502,7 +2519,7 @@ RectTransform:
   - {fileID: 224626441320576350}
   - {fileID: 224258813242536230}
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 13
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

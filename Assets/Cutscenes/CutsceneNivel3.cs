@@ -14,7 +14,7 @@ public class CutsceneNivel3 : MonoBehaviour {
     public GameObject[] uiButtons;
     public Camera cam;
 
-	public AudioSource throwSound, glowSound, flashSound, manSound;
+	public AudioSource throwSound, glowSound, flashSound, manSound, questionSound;
 
 	private bool firstTouch = false;
 
@@ -114,7 +114,9 @@ public class CutsceneNivel3 : MonoBehaviour {
         yield return new WaitForSeconds(6f);
         Destroy(particula);
 		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(1f);
+		questionSound.Play();
+		yield return new WaitForSeconds(3.5f);
 		particula2.SetActive(true);
 		pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();
