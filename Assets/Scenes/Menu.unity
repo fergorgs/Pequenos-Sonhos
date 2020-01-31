@@ -1023,7 +1023,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26ea449948c3c54da5ead57b6d810d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  siteURL: https://www.kickante.com.br/campanhas/instituto-andre-franco-vive-arrecadacao
 --- !u!1 &170464522
 GameObject:
   m_ObjectHideFlags: 0
@@ -3186,7 +3185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.63529414}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.8235294}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6209,7 +6208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.69803923}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.83137256}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7128,6 +7127,7 @@ GameObject:
   - component: {fileID: 2054659476}
   - component: {fileID: 2054659478}
   - component: {fileID: 2054659477}
+  - component: {fileID: 2054659479}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -7197,6 +7197,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2054659475}
   m_CullTransparentMesh: 0
+--- !u!114 &2054659479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054659475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0aa0fedbb87e448a44df16f8e884c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PortText: Carregando...
+  IngText: Loading...
+  TchecText: "Na\u010D\xEDt\xE1n\xED"
+  LangMan: {fileID: 0}
 --- !u!224 &2076650988 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224712046160704000, guid: 14f8a6304929ff540a512ab2242cf636,

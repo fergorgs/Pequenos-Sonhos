@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour {
 	public PlayerControllingScript pc;
     public GameObject spritePickup;
     private Animator animator;
+	public AudioSource changeSound;
 
     private bool pickUpUsed = false;
 
@@ -53,6 +54,8 @@ public class Enemy : MonoBehaviour {
 			pickUpUsed = true;
 
 			StartCoroutine(ChangeAlpha(GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0.9f), 1f));
+
+			changeSound.Play();
 
 			GetComponent<Movement>().enabled = false;
 		}

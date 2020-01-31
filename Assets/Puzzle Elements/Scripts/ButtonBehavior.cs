@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ButtonBehavior : MonoBehaviour {
 
     public GameObject player;
-    public GameObject worldSwtCtr;
+	public GameObject pauseControll;
+	private PauseScript pauseScript;
+	public GameObject worldSwtCtr;
     private GameObject bird;
     private WorldSwitchScript wrdSwcScr;
     private AudioSource sfx;
@@ -28,7 +32,10 @@ public class ButtonBehavior : MonoBehaviour {
             worldSwtCtr = GameObject.FindGameObjectWithTag("WCS");
 
         wrdSwcScr = worldSwtCtr.GetComponent<WorldSwitchScript>();
-    }
+
+		pauseControll = GameObject.FindGameObjectWithTag("PC");
+		pauseScript = pauseControll.GetComponent<PauseScript>();
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -42,7 +49,8 @@ public class ButtonBehavior : MonoBehaviour {
 
 
     void OnMouseUp() {
-        if (inRange)
+
+        if (inRange && !EventSystem.current.IsPointerOverGameObject() && !pauseScript.IsPaused())
         {
             Activate();
             animator.SetTrigger("buttonPressed");

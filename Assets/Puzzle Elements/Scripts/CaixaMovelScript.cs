@@ -22,9 +22,9 @@ public class CaixaMovelScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if((sfx.isPlaying && (rb2d.velocity.x == 0) || Mathf.Abs(rb2d.velocity.y) > 0.3f)) {
+		if((sfx.isPlaying && (Mathf.Abs(rb2d.velocity.x) < 0.3f || Mathf.Abs(rb2d.velocity.y) > 0.3f))) {
             sfx.Stop();
-        }else if(rb2d.velocity.x != 0 && !sfx.isPlaying && Mathf.Abs(rb2d.velocity.y) < 0.3f) {
+        }else if(Mathf.Abs(rb2d.velocity.x) > 0.3f && !sfx.isPlaying && Mathf.Abs(rb2d.velocity.y) < 0.3f) {
             sfx.Play();
         }
 
@@ -32,53 +32,11 @@ public class CaixaMovelScript : MonoBehaviour {
             sfx.Stop();
 
 		rb2d.AddForce(new Vector2(-drag * rb2d.velocity.x, 0));
-
-		/*if(transform.parent != null && transform.parent.tag == "Plataforma")
-            onPlatform = true;
-        else
-            onPlatform = false;*/
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        /*if (onPlatform)   //se a caixa está na plataforma e colide com o player
-        {
-            if (collision.gameObject.tag == "Player" && collision.gameObject.transform.position.y < transform.position.y)
-            {
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>(), true);
-                noCollision = true;
-            }
-        }
-        else */if (collision.CompareTag("Player") && rb2d.velocity.y == 0)
-        {
+		if (collision.CompareTag("Player") && rb2d.velocity.y == 0)
             sfx.Play();
-            //collision.GetComponent<Collider2D>().transform.SetParent(transform);
-        }
-
-    }
-
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        /*if (onPlatform)
-        {
-            if (noCollision = true && col.gameObject.tag == "Player")
-            {
-                if (col.gameObject.transform.position.y > transform.position.y)
-                {
-                    Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), col.gameObject.GetComponent<Collider2D>(), false);
-                    noCollision = false;
-                }
-            }
-        }*/
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        /*if (onPlatform)
-        {
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), col.gameObject.GetComponent<Collider2D>(), true);
-            noCollision = true;
-        }*/
-        //collision.GetComponent<Collider2D>().transform.SetParent(null);
     }
 }

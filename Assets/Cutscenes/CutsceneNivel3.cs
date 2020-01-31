@@ -135,8 +135,9 @@ public class CutsceneNivel3 : MonoBehaviour {
         StartCoroutine(ChangeAlpha(happyEnemy, happyEnemy.GetComponent<SpriteRenderer>().color, Color.white, 2f));
 		flash.SetActive(true);
 		flashSound.Play();
-        yield return new WaitForSeconds(4f);
-		//Destroy(enemy);
+        yield return new WaitForSeconds(2f);
+		Destroy(enemy);
+		yield return new WaitForSeconds(2f);
 
 		//---------------------------------------------------------------
 		//--------muda sprite fazendeiro---------------------------------

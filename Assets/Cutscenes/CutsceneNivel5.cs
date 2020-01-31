@@ -21,6 +21,8 @@ public class CutsceneNivel5 : MonoBehaviour {
 
     public GameObject blackWall, text1, text2, text3, text4, text5, text6, nextBtn, doarBtn, menuBtn, doarText, menuText;
 
+	public AudioSource doorOpenSound, doorCloseSound;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -157,11 +159,13 @@ public class CutsceneNivel5 : MonoBehaviour {
 
         //-------------------------Entra na casa-----------------------------
         casa.GetComponent<SpriteRenderer>().sprite = portaAberta;
+		doorOpenSound.Play();
         StartCoroutine(ChangeAlpha(pc.gameObject, Color.white, Color.clear, 2));
         pc.gameObject.GetComponent<ParticleSystem>().Stop();
         pc.gameObject.GetComponent<ParticleSystem>().Clear();
         yield return new WaitForSeconds(2f);
         casa.GetComponent<SpriteRenderer>().sprite = portaFechada;
+		doorCloseSound.Play();
         yield return new WaitForSeconds(2f);
 
         StartCoroutine(SendSmoke());
