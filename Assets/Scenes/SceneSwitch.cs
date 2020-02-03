@@ -133,11 +133,14 @@ public class SceneSwitch : MonoBehaviour
     }
     
     public void Continue() {
+
 		if (!PlayerPrefs.GetString("CurrentLevel").Equals("Assets / Scenes /Menu.unity"))
 		{
 			//Debug.Log(PlayerPrefs.GetString("CurrentLevel"));
-			path = PlayerPrefs.GetString("CurrentLevel");
-			LoadScreen(path);
+			path = PlayerPrefs.GetString("CurrentLevel", "null");
+			Debug.Log("path = " + path);
+			if(path != "null")
+				LoadScreen(path);
 		}
     }
 
@@ -218,6 +221,7 @@ public class SceneSwitch : MonoBehaviour
 				break;
 			case ShowResult.Skipped:
 				Debug.Log("The ad was skipped before reaching the end.");
+				StartCoroutine(LoadingScreen(path));
 				break;
 			case ShowResult.Failed:
 				Debug.Log("three called | path: " + path);

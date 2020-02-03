@@ -163,7 +163,7 @@ public class ShiftBehavior : MonoBehaviour
 					clicked = !clicked;
 					foreach (SpriteRenderer s in sprd)
 					{
-						if (s.color == Color.magenta)
+						if (s.color.r == 1 && s.color.g == 0 && s.color.b == 1)
 							s.color = Color.white;
 						else
 							s.color = Color.magenta;
@@ -186,7 +186,7 @@ public class ShiftBehavior : MonoBehaviour
 						clicked = !clicked;
 						foreach (SpriteRenderer s in sprd)
 						{
-							if (s.color == Color.magenta)
+							if (s.color.r == 1 && s.color.g == 0 && s.color.b == 1)
 								s.color = Color.white;
 							else
 								s.color = Color.magenta;
