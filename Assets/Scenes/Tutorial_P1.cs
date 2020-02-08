@@ -108,8 +108,8 @@ public class Tutorial_P1 : MonoBehaviour
 		while (!ContinueBtn.GetComponent<ContinuarClicked>().clicked)
 			yield return null;
 		
-		//Text4.SetActive(false);
-		Text4.GetComponent<Text>().color = Color.clear;
+		Text4.SetActive(false);
+		//Text4.GetComponent<Text>().color = Color.clear;
 		BW4.SetActive(false);
 		//ContinueBtn.SetActive(false);
 		ContinueBtn.GetComponent<Image>().color = Color.clear;

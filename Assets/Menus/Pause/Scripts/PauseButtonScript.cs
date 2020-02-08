@@ -11,6 +11,8 @@ public class PauseButtonScript : MonoBehaviour
     public GameObject whiteWall;
     public GameObject menuButtons;
 
+	public float iniTimeScale = 1;
+
     // Use this for initialization
     void Start()
     {
@@ -25,15 +27,16 @@ public class PauseButtonScript : MonoBehaviour
 
         if (pauseScript.IsPaused())
         {
+			iniTimeScale = Time.timeScale;
 
-            Time.timeScale = 0;
+			Time.timeScale = 0;
 
             whiteWall.SetActive(true);
             menuButtons.SetActive(true);
         }
         else
         {
-            Time.timeScale = 1;
+            Time.timeScale = iniTimeScale;
 
             whiteWall.SetActive(false);
 			menuButtons.GetComponent<PauseManuManager>().SetDoarOff();

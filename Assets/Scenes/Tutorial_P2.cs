@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Tutorial_P2 : MonoBehaviour
 {
-	public GameObject Camera, Mao1, Mao2, ContinueBtn, RightBtn, LeftBtn, UpBtn, SwitchBtn, prevCutscene;
+	public GameObject Camera, Mao1, Mao2, ContinueBtn, RightBtn, LeftBtn, UpBtn, SwitchBtn, prevCutscene, caixa1, caixa2;
 
 	public float finalX, time;
 	private float step, distTotal;
@@ -16,6 +16,7 @@ public class Tutorial_P2 : MonoBehaviour
 	private WorldSwitchScript wrdScript;
 
 	private bool firstTouch = false;
+	public bool forcedEnd = false;
 	public bool sceneDone = false;
 
 	/*private bool clickedOn = false, stage4 = false, firstTouch = false;
@@ -61,15 +62,25 @@ public class Tutorial_P2 : MonoBehaviour
 		Mao1.SetActive(true);
 		Mao2.SetActive(true);
 
+		StartCoroutine(ForceEnd());
+
 		while (Camera.transform.position.x < finalX-0.5f)
 		{
 			Camera.transform.position = Vector3.Lerp(Camera.transform.position, finalPos, time);
 
+			if (forcedEnd)
+				break;
+			
 			yield return null;
 		}
 
 		while (!wrdScript.worldHasShifted())
+		{
+			if (forcedEnd)
+				break;
+			
 			yield return null;
+		}
 
 		//ContinueBtn.SetActive(false);
 		Mao1.SetActive(false);
@@ -92,5 +103,23 @@ public class Tutorial_P2 : MonoBehaviour
 			StartCoroutine(Cutscene());
 			firstTouch = true;
 		}
+	}
+
+	private IEnumerator ForceEnd()
+	{
+		while (wrdScript.worldHasShifted())
+			yield return null;
+		
+		while (!wrdScript.worldHasShifted())
+		{
+			if (caixa1.GetComponent<ShiftBehavior>().GetIsReal() && caixa2.GetComponent<ShiftBehavior>().GetIsReal())
+				SwitchBtn.GetComponent<Image>().raycastTarget = true;
+			else
+				SwitchBtn.GetComponent<Image>().raycastTarget = false;
+
+			yield return null;
+		}
+
+		forcedEnd = true;
 	}
 }
