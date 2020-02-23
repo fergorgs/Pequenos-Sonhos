@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-using StartApp;
+//using StartApp;
 using UnityEngine.Advertisements;
 
 public class SceneSwitch : MonoBehaviour
