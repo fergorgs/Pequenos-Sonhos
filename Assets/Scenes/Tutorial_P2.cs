@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Tutorial_P2 : MonoBehaviour
 {
-	public GameObject Camera, Mao1, Mao2, ContinueBtn, RightBtn, LeftBtn, UpBtn, SwitchBtn, prevCutscene, caixa1, caixa2;
+	public GameObject Camera, Mao1, Mao2, ContinueBtn, RightBtn, LeftBtn, UpBtn, SwitchBtn, prevCutscene, caixa1, caixa2, MaoEx, PainelEx;
 
 	public float finalX, time;
 	private float step, distTotal;
@@ -47,8 +47,18 @@ public class Tutorial_P2 : MonoBehaviour
 
 	private IEnumerator Cutscene()
 	{
+		Time.timeScale = 0;
+
+		PainelEx.SetActive(true);
+		MaoEx.SetActive(true);
+
 		while (!wrdScript.worldHasShifted())
 			yield return null;
+
+		PainelEx.SetActive(false);
+		MaoEx.SetActive(false);
+
+		Time.timeScale = 1;
 
 		Camera.GetComponent<SmoothCameraScript>().enabled = false;
 
