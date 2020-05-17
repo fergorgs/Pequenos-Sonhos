@@ -32,7 +32,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -247,6 +247,7 @@ RectTransform:
   - {fileID: 4253248505472694422}
   - {fileID: 224521685136607202}
   - {fileID: 224278632031011880}
+  - {fileID: 224466583601432316}
   - {fileID: 224159189020679378}
   - {fileID: 4815354484354448}
   - {fileID: 224401279992049420}
@@ -255,7 +256,6 @@ RectTransform:
   - {fileID: 224758022240479768}
   - {fileID: 224556449317465026}
   - {fileID: 161255058}
-  - {fileID: 224466583601432316}
   - {fileID: 224980829192284588}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -479,7 +479,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26ea449948c3c54da5ead57b6d810d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  siteURL: https://www.kickante.com.br/campanhas/instituto-andre-franco-vive-arrecadacao
 --- !u!1 &1066579179121524
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,7 +510,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -840,7 +839,7 @@ RectTransform:
   m_LocalScale: {x: 210.06001, y: 73.68, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1218,7 +1217,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114278999889503052
 MonoBehaviour:
@@ -1719,7 +1718,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -1777,6 +1776,7 @@ MonoBehaviour:
   pauseControll: {fileID: 0}
   whiteWall: {fileID: 1952872437603710}
   menuButtons: {fileID: 1869911491047622}
+  iniTimeScale: 1
 --- !u!114 &114751160649049312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2298,7 +2298,7 @@ RectTransform:
   - {fileID: 224643859191873436}
   - {fileID: 224423506377492010}
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 16
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2646,7 +2646,7 @@ RectTransform:
   m_LocalScale: {x: 250, y: 250, z: 0.5555556}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -3439,7 +3439,7 @@ RectTransform:
   - {fileID: 224886589846822528}
   - {fileID: 224011040402045998}
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3802,7 +3802,7 @@ RectTransform:
   m_LocalScale: {x: 210.06, y: 73.68, z: 1}
   m_Children: []
   m_Father: {fileID: 224321016893885622}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

@@ -11,6 +11,8 @@ public class PauseButtonScript : MonoBehaviour
     public GameObject whiteWall;
     public GameObject menuButtons;
 
+	public AudioListener audLis;
+
 	public float iniTimeScale = 1;
 
     // Use this for initialization
@@ -29,6 +31,7 @@ public class PauseButtonScript : MonoBehaviour
         {
 			iniTimeScale = Time.timeScale;
 
+			//AudioListener.pause = true;
 			Time.timeScale = 0;
 
             whiteWall.SetActive(true);
@@ -37,8 +40,9 @@ public class PauseButtonScript : MonoBehaviour
         else
         {
             Time.timeScale = iniTimeScale;
+			//AudioListener.pause = false;
 
-            whiteWall.SetActive(false);
+			whiteWall.SetActive(false);
 			menuButtons.GetComponent<PauseManuManager>().SetDoarOff();
             menuButtons.SetActive(false);
 

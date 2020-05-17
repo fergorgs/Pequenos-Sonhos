@@ -37,13 +37,14 @@ public class PlayerControllingScript : MonoBehaviour
 	public bool HasPickUp() { return pickUp; }
 	public void SetPickUp(bool val) { pickUp = val; }
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
     {
 		rb2d = GetComponent<Rigidbody2D>();
 
 		anim = GetComponent<Animator>();
-    }
+
+	}
 
     // Update is called once per frame
     void FixedUpdate()
@@ -191,33 +192,33 @@ public class PlayerControllingScript : MonoBehaviour
 		//-----------------------------------------------------------------------------------------
 		//------------------------------------SOUND EFFECTS----------------------------------------
 		//-----------------------------------------------------------------------------------------
-
-		if (!usingPickUp)
-		{
-			//Passos
-			//if ((SimpleInput.GetAxis("Horizontal") != 0f || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) && (grounded && foundTile))
-			if (animState == AnimStates.Walking && Time.timeScale > 0)
+		
+			if (!usingPickUp)
 			{
-				if (!passos.isPlaying)
-					passos.Play();
+				//Passos
+				//if ((SimpleInput.GetAxis("Horizontal") != 0f || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) && (grounded && foundTile))
+				if (animState == AnimStates.Walking && Time.timeScale > 0.5f)
+				{
+					if (!passos.isPlaying)
+						passos.Play();
+				}
+				else
+					passos.Pause();
+
+				//Pulo
+				if ((grounded || canGhostJump) && (SimpleInput.GetAxis("Vertical") > 0f || Input.GetKey(KeyCode.UpArrow)))
+					jumping[(int)Random.Range(0, 3)].Play();
+
+				//Landing
+				if (grounded != groundedBuffer && grounded)
+					landing.Play();
+				groundedBuffer = grounded;
 			}
-			else
-				passos.Pause();
-
-			//Pulo
-			if ((grounded || canGhostJump) && (SimpleInput.GetAxis("Vertical") > 0f || Input.GetKey(KeyCode.UpArrow)))
+			else if (usingPickupBuffer != usingPickUp && usingPickUp)
+			{
 				jumping[(int)Random.Range(0, 3)].Play();
-
-			//Landing
-			if (grounded != groundedBuffer && grounded)
-				landing.Play();
-			groundedBuffer = grounded;
-		}
-		else if (usingPickupBuffer != usingPickUp && usingPickUp)
-		{
-			jumping[(int)Random.Range(0, 3)].Play();
-			usingPickupBuffer = usingPickUp;
-		}
+				usingPickupBuffer = usingPickUp;
+			}
 	}
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SendToSiteButton : MonoBehaviour {
 
-	private string siteURL = "http://gg.gg/linkToCampaign";
+	private string siteURL = "https://www.andrefrancovive.org.br/doar/";
 
 	// Use this for initialization
 	void Start () {

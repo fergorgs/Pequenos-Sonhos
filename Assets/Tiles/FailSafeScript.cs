@@ -15,6 +15,7 @@ public class FailSafeScript : MonoBehaviour
 	public WorldSwitchScript wrdCtrl;
 
 	private bool isPlayer = false;
+	public bool wishToTPPlayer = false;
 	private float rightBound, leftBound, upperBound, lowerBound;
 
     // Start is called before the first frame update
@@ -88,5 +89,8 @@ public class FailSafeScript : MonoBehaviour
 				}
 			}
 		}
+		else if(wishToTPPlayer)
+			if (collision.gameObject == targetObj)
+				targetObj.transform.position = targetDest;
 	}
 }
