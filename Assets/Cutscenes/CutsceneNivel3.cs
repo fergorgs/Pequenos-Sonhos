@@ -6,7 +6,7 @@ public class CutsceneNivel3 : MonoBehaviour {
 
     public PlayerBehavior pb;
 	public PlayerControllingScript pc;
-    public GameObject enemy, happyEnemy, particula, particula2, flash, fazendeiroT, fazendeiroF;
+    public GameObject enemy, happyEnemy, particula, particula2, flash, fazendeiroT, fazendeiroF, interrogacao;
     public Vector3 outOfLevelPos, keyCutscenePos, finalCutscenePos, outOfCutscenePos, cutsceneCamPos;
 
     public WorldSwitchScript wrdCont;
@@ -114,9 +114,13 @@ public class CutsceneNivel3 : MonoBehaviour {
         yield return new WaitForSeconds(6f);
         Destroy(particula);
 		StartCoroutine(ChangeVolume(glowSound, glowSound.volume, 0, 1f));
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(0.5f);
+		StartCoroutine(ChangeAlpha(interrogacao, interrogacao.GetComponent<SpriteRenderer>().color, Color.white, 0.1f));
+		yield return new WaitForSeconds(0.5f);
 		questionSound.Play();
-		yield return new WaitForSeconds(3.5f);
+		yield return new WaitForSeconds(2f);
+		StartCoroutine(ChangeAlpha(interrogacao, interrogacao.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 0.1f));
+		yield return new WaitForSeconds(1.5f);
 		particula2.SetActive(true);
 		pc.GetComponent<Animator>().Play("Player_Throw");
 		throwSound.Play();

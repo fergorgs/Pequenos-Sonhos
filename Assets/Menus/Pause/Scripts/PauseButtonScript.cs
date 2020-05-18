@@ -31,7 +31,7 @@ public class PauseButtonScript : MonoBehaviour
         {
 			iniTimeScale = Time.timeScale;
 
-			//AudioListener.pause = true;
+//			AudioListener.pause = true;
 			Time.timeScale = 0;
 
             whiteWall.SetActive(true);
@@ -40,7 +40,7 @@ public class PauseButtonScript : MonoBehaviour
         else
         {
             Time.timeScale = iniTimeScale;
-			//AudioListener.pause = false;
+	//		AudioListener.pause = false;
 
 			whiteWall.SetActive(false);
 			menuButtons.GetComponent<PauseManuManager>().SetDoarOff();

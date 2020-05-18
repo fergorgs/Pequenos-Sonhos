@@ -7,6 +7,7 @@ public class PlayerControllingScript : MonoBehaviour
 	//Animations Stuff-----------------------------------
 	public enum AnimStates { Idle, Walking, Jumping, Falling, Pushing, Throwing }
 	private AnimStates animState = AnimStates.Idle;
+	public AnimStates GetAnimState() { return animState; }
 	private Animator anim;
 
 	//Public Variables------------------------------------

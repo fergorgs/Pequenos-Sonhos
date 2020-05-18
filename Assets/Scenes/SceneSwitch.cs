@@ -175,7 +175,8 @@ public class SceneSwitch : MonoBehaviour
 
     public IEnumerator LoadingScreen(string lvlName) {
 		Debug.Log("Chamado");
-        loadingScreenObj.SetActive(true);
+		AudioListener.pause = false;
+		loadingScreenObj.SetActive(true);
         async = SceneManager.LoadSceneAsync(lvlName, LoadSceneMode.Single);
         async.allowSceneActivation = false;
         while (!async.isDone) {

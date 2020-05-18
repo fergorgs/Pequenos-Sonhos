@@ -57,7 +57,7 @@ public class Tutorial_P3 : MonoBehaviour
 		Mao1.SetActive(true);
 
 		Time.timeScale = 0;
-		
+
 		while (!wrdScript.worldHasShifted())
 			yield return null;
 

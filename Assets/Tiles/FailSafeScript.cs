@@ -16,6 +16,7 @@ public class FailSafeScript : MonoBehaviour
 
 	private bool isPlayer = false;
 	public bool wishToTPPlayer = false;
+	public bool adaptive = false;
 	private float rightBound, leftBound, upperBound, lowerBound;
 
     // Start is called before the first frame update
@@ -90,7 +91,14 @@ public class FailSafeScript : MonoBehaviour
 			}
 		}
 		else if(wishToTPPlayer)
+		{
 			if (collision.gameObject == targetObj)
-				targetObj.transform.position = targetDest;
+			{
+				if (adaptive)
+					targetObj.transform.position = new Vector3(targetObj.transform.position.x, transform.position.y + targetDest.y, 0);
+				else
+					targetObj.transform.position = targetDest;
+			}
+		}
 	}
 }

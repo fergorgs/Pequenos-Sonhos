@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 222091189392806942}
   - component: {fileID: 114508764607942492}
   - component: {fileID: 114918273283417618}
+  - component: {fileID: 6453255333982287666}
   m_Layer: 0
   m_Name: Text 3
   m_TagString: Untagged
@@ -207,6 +208,22 @@ MonoBehaviour:
   TchecText: "Pokud to preferujete, pomo\u017Ete n\xE1m@pod\xEDv\xE1n\xEDm se na
     reklama. V\xFDnos generovan\xFD reklama@ s touto hrou bude tak\xE9 zasl\xE1n
     na instituci"
+  LangMan: {fileID: 0}
+--- !u!114 &6453255333982287666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027770311227554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906a31175e882c14aa741dd89a8352ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PortText: 
+  IngText: 
+  TchecText: 
   LangMan: {fileID: 0}
 --- !u!1 &1038291472329298
 GameObject:
@@ -1776,6 +1793,7 @@ MonoBehaviour:
   pauseControll: {fileID: 0}
   whiteWall: {fileID: 1952872437603710}
   menuButtons: {fileID: 1869911491047622}
+  audLis: {fileID: 0}
   iniTimeScale: 1
 --- !u!114 &114751160649049312
 MonoBehaviour:

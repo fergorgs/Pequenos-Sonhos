@@ -92,6 +92,9 @@ public class Tutorial_P1 : MonoBehaviour
 			yield return null;
 
 		//PARTE 3------------------------------------------------------------------------------------------------
+
+		SwicthButton.GetComponent<Image>().raycastTarget = false;
+
 		startTime = Time.time;
 		while(Time.time-startTime < 0.7f)
 			yield return null;
@@ -101,7 +104,6 @@ public class Tutorial_P1 : MonoBehaviour
 		ContinueBtn.GetComponent<Image>().color = new Color(1, 1, 1, 0.92f);
 		ContinueBtn.GetComponentInChildren<Text>().color = btnTextColor;
 		ContinueBtn.GetComponent<Image>().raycastTarget = true;
-		SwicthButton.GetComponent<Image>().raycastTarget = false;
 
 		Time.timeScale = 0;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class CurrentLanguage : MonoBehaviour {
 
@@ -13,6 +14,13 @@ public class CurrentLanguage : MonoBehaviour {
 	public Lingua lingua;
 
 	private bool first = false; public bool GetFirst() { return first; }
+
+	private int temp = PlayerPrefs.GetInt("DefaultText", 0);
+
+	public bool textsActive = false;
+
+	public GameObject debuger;
+	//public TextMesh txtMs;
 
 	public void SetLingua(Lingua val)
 	{
@@ -53,6 +61,25 @@ public class CurrentLanguage : MonoBehaviour {
 
 	private void Start()
 	{Debug.Log(PlayerPrefs.GetInt("CurrentLang"));
+
+		if (temp == 0)
+			textsActive = false;
+		else
+			textsActive = true;
+
+		if (!textsActive)
+		{
+			StartCoroutine(GetText());
+		}
+		else
+		{
+			if(debuger != null)
+			{
+				//debuger.GetComponent<Text>().text = "true";
+			}
+			//txtMs.text = "true";
+		}
+
 		if (PlayerPrefs.GetInt("CurrentLang") == 1)
 		{
 			SetLinguatoIng();
@@ -92,4 +119,30 @@ public class CurrentLanguage : MonoBehaviour {
 	public void SetLinguatoPort() { SetLingua(Lingua.Port); PlayerPrefs.SetInt("CurrentLang", 0); }
     public void SetLinguatoIng() { SetLingua(Lingua.Ing); PlayerPrefs.SetInt("CurrentLang", 1); }
     public void SetLinguatoTchec() { SetLingua(Lingua.Tchec); PlayerPrefs.SetInt("CurrentLang", 2); }
+
+	IEnumerator GetText()
+	{
+		UnityWebRequest www = UnityWebRequest.Get("https://gist.githubusercontent.com/fergorgs/9b884ff91d59ece2703fa6a55e08226e/raw/textInfo.txt");
+		yield return www.SendWebRequest();
+
+		if (www.isNetworkError || www.isHttpError)
+		{
+			Debug.Log(www.error);
+		}
+		else
+		{
+			if (debuger != null)
+			{
+				//debuger.GetComponent<Text>().text = "returned " + www.downloadHandler.text;
+			}
+			//txtMs.text = "returned " + www.downloadHandler.text;
+			if (www.downloadHandler.text == "true")
+			{
+				textsActive = true;
+				PlayerPrefs.SetInt("DefaultText", 1);
+			}
+		}
+
+		//yield return null;
+	}
 }

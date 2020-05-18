@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Networking;
 
 public class TESTScript : MonoBehaviour
 {
-	string gameId = "3412316";
-	bool testMode = false;
 
 	void Start()
 	{
-		Debug.Log("script initiating");
-		Advertisement.Initialize(gameId, testMode);
-		Debug.Log("finished initiating");
+		StartCoroutine(GetText());
 	}
 
-	public void DisplayTest()
+	IEnumerator GetText()
 	{
-		Debug.Log("button pressed");
-		Advertisement.Show();
-	}
+		UnityWebRequest www = UnityWebRequest.Get("https://gist.github.com/fergorgs/9b884ff91d59ece2703fa6a55e08226e/raw/171a3d8c5f3d1e51a92d692b994057a2b8de311e/textInfo.txt");
+		yield return www.SendWebRequest();
 
-	void Update()
-	{
-		if (Input.GetKeyUp(KeyCode.T))
-			DisplayTest();
+		if (www.isNetworkError || www.isHttpError)
+		{
+			Debug.Log("error: " + www.error);
+		}
+		else
+		{
+			Debug.Log("message: " + www.downloadHandler.text);
+			//textsActive = true;
+		}
 	}
 }

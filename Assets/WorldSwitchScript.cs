@@ -22,6 +22,8 @@ public class WorldSwitchScript : MonoBehaviour
     public AudioSource BgMusic;
 	public AudioSource DreamMusic;
     public AudioSource[] ambient;
+	private AudioSource stepsSound;
+	private GameObject player;
 
 	private float startVolume;
 
@@ -38,12 +40,28 @@ public class WorldSwitchScript : MonoBehaviour
 
 		startVolume = BgMusic.volume;
 		DreamMusic.volume = 0;
+
+		player = GameObject.FindGameObjectWithTag("Player");
+
+		if(player != null)
+			stepsSound = player.GetComponent<PlayerControllingScript>().passos;
         
     }
 
     // Update is called once per frame
     void Update()
     {
+		Debug.Log("time scale = " + Time.timeScale);
+
+		if (player != null)
+		{
+			if (Time.timeScale == 0)
+				stepsSound.Pause();
+			else if (player.GetComponent<PlayerControllingScript>().GetAnimState() == PlayerControllingScript.AnimStates.Walking)
+				if(!stepsSound.isPlaying)
+					stepsSound.Play();
+		}
+
         if (worldShifted)
             worldShifted = false;
 

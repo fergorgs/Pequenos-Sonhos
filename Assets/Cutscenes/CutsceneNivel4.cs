@@ -9,12 +9,13 @@ public class CutsceneNivel4 : MonoBehaviour {
 
     public PlayerBehavior pb;
 	public PlayerControllingScript pc;
-    public GameObject estatua, particula, particula2, particula3, bird, birdPuppet;
+    public GameObject estatua, particula, particula2, particula3, bird, birdPuppet, interrogacao;
 	public Vector3 outOfLevelPos, keyCutscenePos, cutscenePos, outOfCutscenePos, finalCamPos;
     public GameObject[] moveButtons;
     public GameObject SwitchButton;
     public GameObject pickupCanvas;
     public GameObject flash;
+	public GameObject maoTela, maoPassaro;
 	//public AudioSource bgMusic;
 
     public CutsceneShift ctSh;
@@ -156,9 +157,12 @@ public class CutsceneNivel4 : MonoBehaviour {
 		//Triste
 		yield return new WaitForSeconds(2f);
 		pc.GetComponent<Animator>().Play("Looking_Up");
+		StartCoroutine(ChangeAlpha(interrogacao, interrogacao.GetComponent<SpriteRenderer>().color, Color.white, 0.1f));
 		yield return new WaitForSeconds(0.5f);
 		questionSound.Play();
-		yield return new WaitForSeconds(2.5f);
+		yield return new WaitForSeconds(2f);
+		StartCoroutine(ChangeAlpha(interrogacao, interrogacao.GetComponent<SpriteRenderer>().color, new Color(1, 1, 1, 0), 0.1f));
+		yield return new WaitForSeconds(0.5f);
 		pc.GetComponent<Animator>().Play("Idle_Animation");
 		//bird.GetComponent<IdleBehavior>().SetIsCutScene(true);
 		pc.GetComponent<SpriteRenderer>().flipX = true;
@@ -177,7 +181,28 @@ public class CutsceneNivel4 : MonoBehaviour {
         birdPuppet.GetComponent<Animator>().Play("BirdTriste");
         birdPuppet.GetComponent<SpriteRenderer>().flipX = false;
 
+		StartCoroutine(WaitForTutorial());
     }
+
+	private IEnumerator WaitForTutorial()
+	{
+		yield return new WaitForSeconds(15f);
+
+		while (!cutS2started)
+		{
+			if (wrdCont.worldIsReal())
+			{
+				maoTela.GetComponent<Image>().color = Color.white;
+				maoPassaro.GetComponent<SpriteRenderer>().color = Color.clear;
+			}
+			else
+			{
+				maoTela.GetComponent<Image>().color = Color.clear;
+				maoPassaro.GetComponent<SpriteRenderer>().color = Color.white;
+			}
+			yield return new WaitForFixedUpdate();
+		}
+	}
 
     private IEnumerator Cutscene2(Vector3 a, Vector3 b, float speed)
     {
@@ -244,6 +269,8 @@ public class CutsceneNivel4 : MonoBehaviour {
 		if (ctSh.GetIsReal() && wrdCont.worldIsReal() && !cutS2started)
         {
             StartCoroutine(Cutscene2(pc.transform.position, outOfCutscenePos, pc.maxVelocity));
+			Destroy(maoTela);
+			Destroy(maoPassaro);
             cutS2started = true;
         }
     }
