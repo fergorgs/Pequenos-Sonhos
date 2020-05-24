@@ -25,9 +25,9 @@ public class TextSelector : MonoBehaviour
     {
 		if (!LangMan.GetComponent<CurrentLanguage>().textsActive || LangMan == null)
 		{
-			GetComponent<LangText>().PortText = PortText;
+			/*GetComponent<LangText>().PortText = PortText;
 			GetComponent<LangText>().IngText = IngText;
-			GetComponent<LangText>().TchecText = TchecText;
+			GetComponent<LangText>().TchecText = TchecText;*/
 		}
     }
 }

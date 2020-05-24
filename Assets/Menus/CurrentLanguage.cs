@@ -15,7 +15,7 @@ public class CurrentLanguage : MonoBehaviour {
 
 	private bool first = false; public bool GetFirst() { return first; }
 
-	private int temp = PlayerPrefs.GetInt("DefaultText", 0);
+	private int temp;
 
 	public bool textsActive = false;
 
@@ -61,6 +61,8 @@ public class CurrentLanguage : MonoBehaviour {
 
 	private void Start()
 	{Debug.Log(PlayerPrefs.GetInt("CurrentLang"));
+
+		temp = PlayerPrefs.GetInt("DefaultText", 0);
 
 		if (temp == 0)
 			textsActive = false;
